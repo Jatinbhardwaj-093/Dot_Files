@@ -1,8 +1,12 @@
 # ~/.config/starship/starship.toml
-format = "$directory$character"
-right_format = "$all"
 
+add_newline = false
+# A minimal left prompt
+format = """$directory$character"""
 palette = "catppuccin_mocha"
+# move the rest of the prompt to the right
+right_format = """$all"""
+command_timeout = 1000
 
 [character]
 vicmd_symbol = "[N] >>>"
@@ -14,12 +18,11 @@ success_symbol = '[➜](bold green)'
 [git_branch]
 format =  '[$symbol$branch(:$remote_branch)]($style)'
 
+[python]
+format = '[$symbol$version \($virtualenv\)]($style)'
+
 [package]
 disabled = true
-
-[python]
-format = "[$symbol$version ($virtualenv)]($style)"
-style = "mauve"
 
 [aws]
 format = '[$symbol(profile: "$profile" )(\(region: $region\) )]($style)'
