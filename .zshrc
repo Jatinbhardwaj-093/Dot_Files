@@ -200,6 +200,9 @@ export PATH="/Users/jatinbhardwaj/.antigravity-ide/antigravity-ide/bin:$PATH"
 # Enable custom Gruvbox Dark style for all Charm/Glamour CLI utilities (including agy)
 export GLAMOUR_STYLE="/Users/jatinbhardwaj/.config/glow/gruvbox-dark.json"
 
+# Load local private secrets securely (keeps API keys out of public Git repos)
+[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+
 # Launch custom premium welcome dashboard for interactive shells
 if [[ $- == *i* ]]; then
     python3 ~/scripts/welcome.py
