@@ -185,3 +185,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.ScreenContinuity'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'org.localsend.localsendApp'
+run = 'layout floating'
