@@ -56,6 +56,13 @@ if [ -f "$HOME/.config/nvim/lua/float_term.lua" ]; then
     log "Synced vim_float_term.lua"
 fi
 
+# 5c. Neovim Plugins Directory
+if [ -d "$HOME/.config/nvim/lua/plugins" ]; then
+    mkdir -p "$REPO_DIR/.config/nvim/lua/plugins"
+    rsync -av --exclude '.DS_Store' --delete "$HOME/.config/nvim/lua/plugins/" "$REPO_DIR/.config/nvim/lua/plugins/"
+    log "Synced .config/nvim/lua/plugins"
+fi
+
 # 6. Ghostty Config
 GHOSTTY_CONF="$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 if [ -f "$GHOSTTY_CONF" ]; then
