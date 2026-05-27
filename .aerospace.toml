@@ -50,6 +50,7 @@ outer.right = 10
 # Layouts
 alt-ctrl-cmd-slash = 'layout tiles horizontal vertical'
 alt-ctrl-cmd-comma = 'layout accordion horizontal vertical'
+cmd-e = 'layout floating tiling'
 
 # Focus
 alt-ctrl-cmd-h = 'focus left'
