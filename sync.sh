@@ -50,6 +50,12 @@ if [ -f "$HOME/.config/nvim/lua/mappings.lua" ]; then
     log "Synced vim_mappings.lua"
 fi
 
+# 5b. Neovim Float Term
+if [ -f "$HOME/.config/nvim/lua/float_term.lua" ]; then
+    cp "$HOME/.config/nvim/lua/float_term.lua" "$REPO_DIR/vim_float_term.lua"
+    log "Synced vim_float_term.lua"
+fi
+
 # 6. Ghostty Config
 GHOSTTY_CONF="$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 if [ -f "$GHOSTTY_CONF" ]; then
