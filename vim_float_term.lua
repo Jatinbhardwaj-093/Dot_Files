@@ -61,3 +61,7 @@ vim.api.nvim_create_user_command("FloatTerm", toggle_float_terminal, {})
 
 -- Map <leader>ft in Normal and Terminal modes to toggle the terminal
 vim.keymap.set({ "n", "t" }, "<leader>ft", toggle_float_terminal, { desc = "Toggle floating terminal" })
+
+-- Map double Escape to exit Terminal Mode
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
