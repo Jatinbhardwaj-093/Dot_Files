@@ -1,12 +1,11 @@
-
 # Font settings with a Nerd Font
 font-family = JetBrainsMono Nerd Font
 font-size = 16
 
-theme = chalk
+theme = Gruvbox Dark
 
 # Terminal appearance
-background-opacity = 0.95
+background-opacity = 0.9
 bold-is-bright = true
 minimum-contrast = 2.0
 
@@ -50,3 +49,7 @@ keybind = cmd+s>l=goto_split:right
 keybind = cmd+s>z=toggle_split_zoom
 
 keybind = cmd+s>e=equalize_splits
+
+# Send Ctrl+/ character code on Cmd+/ press
+keybind = cmd+/=text:\x1f
+

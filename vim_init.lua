@@ -12,6 +12,8 @@ if not vim.uv.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
+vim.opt.number = true
+vim.opt.relativenumber = true
 
 local lazy_config = require "configs.lazy"
 
@@ -38,7 +40,7 @@ vim.schedule(function()
   require "mappings"
 end)
 
-vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
+vim.keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>")
 vim.keymap.set("i", "<M-b>", "<Esc>bi")
 vim.keymap.set("i", "<M-f>", "<Esc>ea")
 vim.keymap.set("i", "<M-BS>", "<Esc>dbi")

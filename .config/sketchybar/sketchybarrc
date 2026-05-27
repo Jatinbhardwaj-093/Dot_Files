@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Export Homebrew binary path for launchd environment compatibility
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+# Source colors
+source "$HOME/.config/sketchybar/colors.sh"
+
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+
+# Unload previous items
+sketchybar --remove '/.*/'
+
+# Add aerospace event
+sketchybar --add event aerospace_workspace_change
+
+# Add antigravity event
+sketchybar --add event antigravity_status_change
+
+##### Bar Appearance #####
+sketchybar --bar \
+  height=38 \
+  color=0xcc1d2021 \
+  border_width=1 \
+  border_color=0x22ebdbb2 \
+  blur_radius=30 \
+  corner_radius=12 \
+  margin=10 \
+  y_offset=10 \
+  padding_left=10 \
+  padding_right=10 \
+  position=top \
+  sticky=on \
+  topmost=window
+
+##### Changing Defaults #####
+default=(
+  padding_left=4
+  padding_right=4
+  icon.font="JetBrainsMono Nerd Font:Bold:15.0"
+  label.font="JetBrainsMono Nerd Font:Bold:13.0"
+  icon.color=$FG1
+  label.color=$FG1
+  icon.padding_left=6
+  icon.padding_right=2
+  label.padding_left=2
+  label.padding_right=6
+  background.height=26
+  background.corner_radius=8
+  background.color=0x26504945
+  background.border_width=1
+  background.border_color=0x14ebdbb2
+)
+sketchybar --default "${default[@]}"
+
+##### Left Items: Workspaces #####
+# source "$HOME/.config/sketchybar/items/apple.sh"
+source "$HOME/.config/sketchybar/items/spaces.sh"
+
+##### Middle Items: Active Workspace #####
+sketchybar --add item active_space center
+sketchybar --set active_space icon.drawing=off \
+                              label.color=$YELLOW \
+                              label.padding_left=10 \
+                              label.padding_right=10 \
+                              update_freq=1 \
+                              script="$PLUGIN_DIR/active_space.sh"
+sketchybar --subscribe active_space aerospace_workspace_change front_app_switched
+
+##### Right Items #####
+
+# Clock / Date (Furthest Right)
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon="󰥔" icon.color=$PURPLE label.color=$PURPLE script="$PLUGIN_DIR/clock.sh" \
+           click_script="open -a Calendar" \
+           --subscribe clock mouse.entered mouse.exited
+
+# Battery
+sketchybar --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           click_script="open 'x-apple.systempreferences:com.apple.preference.battery'" \
+           --subscribe battery system_woke power_source_change mouse.entered mouse.exited
+
+
+# CPU Metric
+source "$HOME/.config/sketchybar/items/cpu.sh"
+
+# RAM Metric
+source "$HOME/.config/sketchybar/items/ram.sh"
+
+
+##### Force all scripts to run the first time #####
+sketchybar --update

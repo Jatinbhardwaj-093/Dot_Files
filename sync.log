@@ -1,0 +1,12 @@
+[2026-05-27 19:20:14] Starting dotfiles sync...
+[2026-05-27 19:20:14] Synced .zshrc
+[2026-05-27 19:20:14] Synced .tmux.conf
+[2026-05-27 19:20:15] Synced starship.toml
+[2026-05-27 19:20:15] Synced vim_init.lua
+[2026-05-27 19:20:15] Synced vim_mappings.lua
+[2026-05-27 19:20:15] Synced .ghostty_config
+[2026-05-27 19:20:15] Synced .aerospace.toml
+[2026-05-27 19:20:15] Synced .config/aerospace
+[2026-05-27 19:20:15] Synced .config/borders
+[2026-05-27 19:20:15] Synced .config/sketchybar
+[2026-05-27 19:20:15] Changes detected in dotfiles. Committing and pushing...

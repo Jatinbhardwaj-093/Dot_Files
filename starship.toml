@@ -1,74 +1,136 @@
 # ~/.config/starship/starship.toml
 
 add_newline = false
-# A minimal left prompt
+palette = "gruvbox_dark"
+
+# Left Prompt: extremely clean directory and custom prompt character
 format = """$directory$character"""
-palette = "catppuccin_mocha"
-# move the rest of the prompt to the right
-right_format = """$all"""
+
+# Right Prompt: show git, language runtimes, cmd duration, and exit status
+right_format = """$cmd_duration$git_branch$git_status$python$nodejs$golang$rust$aws$kubernetes$docker_context$status"""
+
 command_timeout = 1000
 
+# =========================================================
+# CHARACTER
+# =========================================================
 [character]
-vicmd_symbol = "[N] >>>"
 success_symbol = '[➜](bold green)'
+error_symbol = '[➜](bold red)'
+vicmd_symbol = '[N] >>> '
 
-[directory.substitutions]
-'~/tests/starship-custom' = 'work-project'
+# =========================================================
+# DIRECTORY
+# =========================================================
+[directory]
+style = "bold aqua"
+read_only = " 󰌾"
+read_only_style = "bold red"
+truncation_length = 4
+truncate_to_repo = true
+truncation_symbol = "…/"
+format = "[$path]($style)[$read_only]($read_only_style) "
 
+# =========================================================
+# GIT
+# =========================================================
 [git_branch]
-format =  '[$symbol$branch(:$remote_branch)]($style)'
+symbol = " "
+style = "bold orange"
+format = "on [$symbol$branch]($style) "
 
+[git_status]
+style = "bold red"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = "󰯓 "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?"
+stashed = ""
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+# =========================================================
+# LANGUAGES & ENVIRONMENTS
+# =========================================================
 [python]
-format = '[$symbol$version \($virtualenv\)]($style)'
+symbol = " "
+style = "bold yellow"
+format = 'via [$symbol$version( \($virtualenv\))]($style) '
 
-[package]
-disabled = true
-
-[aws]
-format = '[$symbol(profile: "$profile" )(\(region: $region\) )]($style)'
-disabled = false
-style = 'bold blue'
-symbol = " "
+[nodejs]
+symbol = "󰎙 "
+style = "bold green"
+format = "via [$symbol$version]($style) "
 
 [golang]
-format = '[ ](bold cyan)'
+symbol = " "
+style = "bold aqua"
+format = "via [$symbol$version]($style) "
+
+[rust]
+symbol = " "
+style = "bold orange"
+format = "via [$symbol$version]($style) "
+
+[aws]
+symbol = " "
+style = "bold blue"
+format = 'via [$symbol$profile( \($region\))]($style) '
+disabled = false
 
 [kubernetes]
-symbol = '☸ '
+symbol = "☸ "
+style = "bold aqua"
+format = 'at [$symbol$context( \($namespace\))]($style) '
 disabled = true
-detect_files = ['Dockerfile']
-format = '[$symbol$context( \($namespace\))]($style) '
-contexts = [
-  { context_pattern = "arn:aws:eks:us-west-2:577926974532:cluster/zd-pvc-omer", style = "green", context_alias = "omerxx", symbol = " " },
-]
 
 [docker_context]
+symbol = "🐳 "
+style = "bold blue"
+format = "via [$symbol$context]($style) "
 disabled = true
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
+# =========================================================
+# COMMAND DURATION & STATUS
+# =========================================================
+[cmd_duration]
+min_time = 2000
+style = "bold gray"
+format = "took [$duration]($style) "
+
+[status]
+disabled = false
+format = "[$symbol$status]($style) "
+symbol = "✘ "
+success_symbol = ""
+style = "bold red"
+
+# =========================================================
+# PALETTES
+# =========================================================
+[palettes.gruvbox_dark]
+# Bright colors for prompt accent
+red = "#fb4934"
+green = "#b8bb26"
+yellow = "#fabd2f"
+blue = "#83a598"
+purple = "#d3869b"
+aqua = "#8ec07c"
+orange = "#fe8019"
+gray = "#a89984"
+black = "#282828"
+white = "#ebdbb2"
+
+# Dark Gruvbox palette versions
+dark_red = "#cc241d"
+dark_green = "#98971a"
+dark_yellow = "#d79921"
+dark_blue = "#458588"
+dark_purple = "#b16286"
+dark_aqua = "#689d6a"
+dark_orange = "#d65d0e"
+dark_gray = "#928374"

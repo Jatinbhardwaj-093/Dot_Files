@@ -77,7 +77,10 @@ alias pip="pip3"
 alias uvr="uv run"
 alias uvpi="uv pip install"
 alias uvv="uv venv"
+alias activate="source .venv/bin/activate"
 
+# clear alias
+alias clr="clear"
 
 # fzf 
 # called from ~/scripts/
@@ -100,10 +103,14 @@ alias dtree="tree -L 3 -a -d -I '.git' --charset X "
 alias gt="git"
 alias ga="git add ."
 alias gs="git status -s"
-alias gc='git commit -m'
+alias gc='git commit -am'
 alias glog='git log --oneline --graph --all'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
+# tmux aliases
+alias sessions="tmux list-sessions"
+alias tmuxa="tmux attach -t"
+alias tmuxn="tmux new -s"
 
 # Open files with fzf and nvim
 alias fnvim='nvim $(fzf)'
@@ -175,3 +182,25 @@ fpath=(/Users/jatinbhardwaj/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
+
+# Added by Antigravity
+export PATH="/Users/jatinbhardwaj/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/Library/Python/3.*/bin:$PATH"
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/opt/qemu/bin:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/jatinbhardwaj/.local/bin:$PATH"
+
+# Added by Antigravity IDE
+export PATH="/Users/jatinbhardwaj/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# Enable custom Gruvbox Dark style for all Charm/Glamour CLI utilities (including agy)
+export GLAMOUR_STYLE="/Users/jatinbhardwaj/.config/glow/gruvbox-dark.json"
+
+# Launch custom premium welcome dashboard for interactive shells
+if [[ $- == *i* ]]; then
+    python3 ~/scripts/welcome.py
+fi
