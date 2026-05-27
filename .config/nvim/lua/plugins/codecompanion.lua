@@ -20,7 +20,7 @@ return {
   end,
   keys = {
     -- Toggle Chat Panel (Normal and Visual mode to ask questions about selected code!)
-    { "<leader>cc", "<cmd>CodeCompanionToggle<cr>", desc = "Toggle CodeCompanion Chat", mode = { "n", "v" } },
+    { "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Toggle CodeCompanion Chat", mode = { "n", "v" } },
     
     -- Show CodeCompanion AI Actions menu (explain, optimize, fix, test, etc.)
     { "<leader>ca", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions", mode = { "n", "v" } },
