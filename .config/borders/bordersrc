@@ -9,3 +9,5 @@ options=(
 )
 
 borders "${options[@]}"
+
+# Test comment for dotfiles auto-sync verification
