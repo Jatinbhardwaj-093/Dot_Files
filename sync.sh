@@ -97,6 +97,15 @@ if [ -d "$HOME/.config/sketchybar" ]; then
     log "Synced .config/sketchybar"
 fi
 
+# 11. Yazi Configuration
+if [ -d "$HOME/.config/yazi" ]; then
+    mkdir -p "$REPO_DIR/.config/yazi"
+    cp "$HOME/.config/yazi/yazi.toml" "$REPO_DIR/.config/yazi/yazi.toml" 2>/dev/null || true
+    cp "$HOME/.config/yazi/theme.toml" "$REPO_DIR/.config/yazi/theme.toml" 2>/dev/null || true
+    cp "$HOME/.config/yazi/package.toml" "$REPO_DIR/.config/yazi/package.toml" 2>/dev/null || true
+    log "Synced .config/yazi TOML files"
+fi
+
 # Git Commit and Push if changes exist
 if [ -n "$(git status --porcelain)" ]; then
     log "Changes detected in dotfiles. Committing and pushing..."
