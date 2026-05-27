@@ -53,3 +53,8 @@ keybind = cmd+s>e=equalize_splits
 # Send Ctrl+/ character code on Cmd+/ press
 keybind = cmd+/=text:\x1f
 
+# Custom GLSL Shader for smooth cursor tail/smear (Ninja Jumping Cursor)
+custom-shader = /Users/jatinbhardwaj/.config/ghostty/shaders/cursor_tail.glsl
+custom-shader-animation = always
+
+
