@@ -130,4 +130,55 @@ return {
       { "<C-\\>", "<cmd>TmuxNavigatePrevious<cr>" },
     },
   },
+
+  -- Custom rainbow indent guides to match the stunning aesthetic in your screenshot!
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "User FilePost",
+    opts = {
+      indent = {
+        char = "│",
+      },
+      scope = {
+        enabled = true,
+        show_start = true,
+        show_end = true,
+        injected_languages = true,
+        highlight = { "IblScopeChar" },
+      },
+    },
+    config = function(_, opts)
+      dofile(vim.g.base46_cache .. "blankline")
+
+      local hooks = require "ibl.hooks"
+      hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+
+      -- Define custom colors for rainbow indent levels and active scope
+      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#fb4934" })     -- Gruvbox Red
+        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#fe8019" })  -- Gruvbox Orange
+        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#fabd2f" })  -- Gruvbox Yellow
+        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#b8bb26" })   -- Gruvbox Green
+        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#83a598" })    -- Gruvbox Blue
+        vim.api.nvim_set_hl(0, "RainbowPurple", { fg = "#d3869b" })  -- Gruvbox Purple
+        vim.api.nvim_set_hl(0, "RainbowAqua", { fg = "#8ec07c" })    -- Gruvbox Aqua
+
+        -- Make active scope high contrast and bold
+        vim.api.nvim_set_hl(0, "IblScopeChar", { fg = "#fe8019", bold = true })
+      end)
+
+      opts.indent.highlight = {
+        "RainbowRed",
+        "RainbowOrange",
+        "RainbowYellow",
+        "RainbowGreen",
+        "RainbowBlue",
+        "RainbowPurple",
+        "RainbowAqua",
+      }
+
+      require("ibl").setup(opts)
+      dofile(vim.g.base46_cache .. "blankline")
+    end,
+  },
 }
