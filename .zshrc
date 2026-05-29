@@ -108,7 +108,7 @@ alias glog='git log --oneline --graph --all'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
 # tmux aliases
-alias sessions="tmux list-sessions"
+alias tmuxl="tmux list-sessions"
 alias tmuxa="tmux attach -t"
 alias tmuxn="tmux new -s"
 
