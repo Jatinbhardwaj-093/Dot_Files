@@ -153,28 +153,30 @@ return {
       local hooks = require "ibl.hooks"
       hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
 
-      -- Define custom colors for rainbow indent levels and active scope
+      -- Define custom colors for rainbow indent levels and active scope linked to rainbow brackets
       hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#fb4934" })     -- Gruvbox Red
-        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#fe8019" })  -- Gruvbox Orange
-        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#fabd2f" })  -- Gruvbox Yellow
-        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#b8bb26" })   -- Gruvbox Green
-        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#83a598" })    -- Gruvbox Blue
-        vim.api.nvim_set_hl(0, "RainbowPurple", { fg = "#d3869b" })  -- Gruvbox Purple
-        vim.api.nvim_set_hl(0, "RainbowAqua", { fg = "#8ec07c" })    -- Gruvbox Aqua
+        -- Fallback colors for RainbowDelimiter groups in case they aren't configured by the theme
+        vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#fb4934", default = true })     -- Gruvbox Red
+        vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#fabd2f", default = true })  -- Gruvbox Yellow
+        vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#83a598", default = true })    -- Gruvbox Blue
+        vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#fe8019", default = true })  -- Gruvbox Orange
+        vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#b8bb26", default = true })   -- Gruvbox Green
+        vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#d3869b", default = true })  -- Gruvbox Purple/Violet
+        vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#8ec07c", default = true })    -- Gruvbox Aqua/Cyan
 
         -- Make active scope high contrast and bold
         vim.api.nvim_set_hl(0, "IblScopeChar", { fg = "#fe8019", bold = true })
       end)
 
+      -- Use the exact highlight groups of rainbow-delimiters.nvim so indentation lines track bracket colors
       opts.indent.highlight = {
-        "RainbowRed",
-        "RainbowOrange",
-        "RainbowYellow",
-        "RainbowGreen",
-        "RainbowBlue",
-        "RainbowPurple",
-        "RainbowAqua",
+        "RainbowDelimiterRed",
+        "RainbowDelimiterYellow",
+        "RainbowDelimiterBlue",
+        "RainbowDelimiterOrange",
+        "RainbowDelimiterGreen",
+        "RainbowDelimiterViolet",
+        "RainbowDelimiterCyan",
       }
 
       require("ibl").setup(opts)
