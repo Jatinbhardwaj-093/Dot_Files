@@ -2,7 +2,7 @@
 font-family = JetBrainsMono Nerd Font
 font-size = 16
 
-theme = Gruvbox Dark
+theme = Gruvbox Material
 
 # Terminal appearance
 background-opacity = 0.9
