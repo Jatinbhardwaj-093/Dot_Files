@@ -6,16 +6,16 @@ export BG1=0xff3c3836
 export BG2=0xff504945
 
 export FG0=0xfffbf1c7
-export FG1=0xffebdbb2
-export FG2=0xffd5c4a1
+export FG1=0xffddc7a1
+export FG2=0xffc7b89d
 
-export RED=0xfffb4934
-export GREEN=0xffb8bb26
-export YELLOW=0xfffabd2f
-export BLUE=0xff83a598
+export RED=0xffea6962
+export GREEN=0xffa9b665
+export YELLOW=0xffd8a657
+export BLUE=0xff7daea3
 export PURPLE=0xffd3869b
-export AQUA=0xff8ec07c
-export ORANGE=0xfffe8019
+export AQUA=0xff89b482
+export ORANGE=0xffe78a4e
 export GRAY=0xff928374
 
 export TRANSPARENT=0x00000000
