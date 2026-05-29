@@ -6,6 +6,8 @@ local map = vim.keymap.set
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
+map("i", "<C-c>", "<Esc>", { desc = "Exit insert mode" })
+map("v", "<C-c>", "<Esc>", { desc = "Exit visual mode" })
 map("i", "<C-l>", function() return vim.fn["codeium#AcceptNextLine"]() end, { expr = true, silent = true, desc = "Codeium Accept Line" })
 map("i", "<C-k>", function() return vim.fn["codeium#AcceptNextWord"]() end, { expr = true, silent = true, desc = "Codeium Accept Word" })
 map("i", "<C-;>", function() return vim.fn["codeium#CycleCompletions"](1) end, { expr = true, silent = true, desc = "Codeium Next Suggestion" })
