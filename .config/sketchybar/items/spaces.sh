@@ -6,7 +6,7 @@ source "$HOME/.config/sketchybar/colors.sh"
 ALL_WORKSPACES=$(aerospace list-workspaces --all)
 
 # Preferred ordering
-ORDER=("Terminal" "Browser" "Chat" "Notes" "Research" "1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
+ORDER=("Terminal" "Browser" "Chat" "Obsidian" "Research" "1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
 
 # Collect ordered workspaces
 SORTED_WORKSPACES=()
@@ -63,7 +63,7 @@ for sid in "${SORTED_WORKSPACES[@]}"; do
       "Terminal") icon_str="󰆍" ;;
       "Browser") icon_str="󰖟" ;;
       "Chat") icon_str="󰭹" ;;
-      "Notes") icon_str="󰠮" ;;
+      "Obsidian") icon_str="󱞎" ;;
       "Research") icon_str="󰗚" ;;
       *) icon_str="󰣆" ;; # default icon for unknown named spaces
     esac
