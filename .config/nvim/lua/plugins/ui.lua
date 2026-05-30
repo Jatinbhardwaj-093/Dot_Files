@@ -164,19 +164,28 @@ return {
         vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#d3869b", default = true })  -- Gruvbox Purple/Violet
         vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#8ec07c", default = true })    -- Gruvbox Aqua/Cyan
 
+        -- Faded/muted colors for rainbow indent lines to prevent visual noise
+        vim.api.nvim_set_hl(0, "RainbowIndentRed", { fg = "#5a3e3f" })
+        vim.api.nvim_set_hl(0, "RainbowIndentYellow", { fg = "#5a523e" })
+        vim.api.nvim_set_hl(0, "RainbowIndentBlue", { fg = "#3e4d5a" })
+        vim.api.nvim_set_hl(0, "RainbowIndentOrange", { fg = "#5a473e" })
+        vim.api.nvim_set_hl(0, "RainbowIndentGreen", { fg = "#465a3e" })
+        vim.api.nvim_set_hl(0, "RainbowIndentViolet", { fg = "#503e5a" })
+        vim.api.nvim_set_hl(0, "RainbowIndentCyan", { fg = "#3e5a51" })
+
         -- Make active scope high contrast and bold
         vim.api.nvim_set_hl(0, "IblScopeChar", { fg = "#fe8019", bold = true })
       end)
 
-      -- Use the exact highlight groups of rainbow-delimiters.nvim so indentation lines track bracket colors
+      -- Use custom faded highlight groups for indentation lines
       opts.indent.highlight = {
-        "RainbowDelimiterRed",
-        "RainbowDelimiterYellow",
-        "RainbowDelimiterBlue",
-        "RainbowDelimiterOrange",
-        "RainbowDelimiterGreen",
-        "RainbowDelimiterViolet",
-        "RainbowDelimiterCyan",
+        "RainbowIndentRed",
+        "RainbowIndentYellow",
+        "RainbowIndentBlue",
+        "RainbowIndentOrange",
+        "RainbowIndentGreen",
+        "RainbowIndentViolet",
+        "RainbowIndentCyan",
       }
 
       require("ibl").setup(opts)
