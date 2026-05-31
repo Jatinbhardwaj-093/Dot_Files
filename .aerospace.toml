@@ -25,6 +25,8 @@ persistent-workspaces = ["Terminal", "Browser", "Chat", "Obsidian", "Research", 
 
 on-mode-changed = []
 
+exec-on-workspace-change = ['/bin/bash', '-c', '/Users/jatinbhardwaj/.config/aerospace/on-workspace-change.sh']
+
 [key-mapping]
 preset = 'qwerty'
 

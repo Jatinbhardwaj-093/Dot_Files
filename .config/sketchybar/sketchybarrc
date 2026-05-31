@@ -88,6 +88,14 @@ source "$HOME/.config/sketchybar/items/cpu.sh"
 # RAM Metric
 source "$HOME/.config/sketchybar/items/ram.sh"
 
+# Space Layout Mode (Tiling / Floating)
+sketchybar --add item space_layout right \
+           --set space_layout \
+                 update_freq=1 \
+                 script="$PLUGIN_DIR/space_layout.sh" \
+                 click_script="/Users/jatinbhardwaj/.config/aerospace/toggle-space-layout.sh" \
+           --subscribe space_layout aerospace_workspace_change front_app_switched mouse.entered mouse.exited
+
 
 ##### Force all scripts to run the first time #####
 sketchybar --update
