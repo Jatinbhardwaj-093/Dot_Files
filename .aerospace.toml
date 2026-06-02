@@ -102,6 +102,10 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 # Finder
 alt-ctrl-cmd-e = 'exec-and-forget open -a Finder'
 
+# Dictionary
+alt-ctrl-cmd-d = 'exec-and-forget open -a Dictionary'
+
+
 # Service Mode
 alt-ctrl-cmd-semicolon = 'mode service'
 
