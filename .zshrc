@@ -73,7 +73,6 @@ PATH=~/.console-ninja/.bin:$PATH
 
 # Extra directories aliases
 alias -- = "cd"
-alias - = "cd .."
 
 # python aliases
 alias python="python3"
