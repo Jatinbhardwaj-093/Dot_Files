@@ -108,6 +108,8 @@ alias gt="git"
 alias ga="git add ."
 alias gs="git status -s"
 alias gc='git commit -am'
+alias gp='git push'
+alias gu='git upstream'
 alias glog='git log --oneline --graph --all'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
