@@ -146,7 +146,7 @@ run = 'move-node-to-workspace Chat'
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
-run = ['layout floating', 'move-node-to-workspace Obsidian']
+run = 'move-node-to-workspace Obsidian'
 
 [[on-window-detected]]
 if.app-id = 'org.zotero.zotero'
