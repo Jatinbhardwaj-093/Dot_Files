@@ -71,9 +71,6 @@ export LANG=en_US.UTF-8
 # Console Ninja
 PATH=~/.console-ninja/.bin:$PATH
 
-# Extra directories aliases
-alias -- = "cd"
-
 # python aliases
 alias python="python3"
 alias pip="pip3"
