@@ -981,3 +981,21 @@ To https://github.com/Jatinbhardwaj-093/Dot_Files.git
 [2026-06-01 19:36:54] Synced .config/sketchybar
 [2026-06-01 19:36:54] Synced .config/yazi TOML files
 [2026-06-01 19:36:54] Changes detected in dotfiles. Committing and pushing...
+fatal: unable to access 'https://github.com/Jatinbhardwaj-093/Dot_Files.git/': Could not resolve host: github.com
+[2026-06-01 19:36:55] ERROR: Failed to push changes to GitHub.
+[2026-06-01 19:36:55] Dotfiles sync completed.
+[2026-06-02 10:27:47] Starting dotfiles sync...
+[2026-06-02 10:27:48] Synced .zshrc
+[2026-06-02 10:27:48] Synced .tmux.conf
+[2026-06-02 10:27:49] Synced starship.toml
+[2026-06-02 10:27:49] Synced vim_init.lua
+[2026-06-02 10:27:49] Synced vim_mappings.lua
+[2026-06-02 10:27:49] Synced vim_float_term.lua
+[2026-06-02 10:27:49] Synced .config/nvim/lua/plugins
+[2026-06-02 10:27:49] Synced .ghostty_config
+[2026-06-02 10:27:49] Synced .aerospace.toml
+[2026-06-02 10:27:50] Synced .config/aerospace
+[2026-06-02 10:27:50] Synced .config/borders
+[2026-06-02 10:27:50] Synced .config/sketchybar
+[2026-06-02 10:27:50] Synced .config/yazi TOML files
+[2026-06-02 10:27:50] Changes detected in dotfiles. Committing and pushing...
