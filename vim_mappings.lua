@@ -24,6 +24,7 @@ vim.keymap.set('n', '<S-h>', ':bprevious<CR>')
 
 -- terminal
 vim.keymap.set('n', '<leader>t', ':terminal<CR>')
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- Comment toggle keymaps (Cmd+/ translated via Ctrl+/ and Ctrl+_)
 map("n", "<C-_>", function() require("Comment.api").toggle.linewise.current() end, { desc = "Comment toggle line" })
