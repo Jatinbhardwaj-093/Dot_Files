@@ -7,20 +7,20 @@ return {
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "hrsh7th/cmp-buffer", -- complete words from buffer
-      "hrsh7th/cmp-path",   -- complete file paths
+      "hrsh7th/cmp-path", -- complete file paths
       "hrsh7th/cmp-nvim-lsp", -- complete words from LSP
       "hrsh7th/cmp-nvim-lua", -- complete neovim lua API
-      "hrsh7th/cmp-cmdline",  -- complete commands in command line mode
+      "hrsh7th/cmp-cmdline", -- complete commands in command line mode
     },
     config = function()
-      local cmp = require("cmp")
+      local cmp = require "cmp"
 
-      cmp.setup({
+      cmp.setup {
         mapping = {
-          ["<C-Space>"] = cmp.mapping.complete(),          -- trigger completion
-          ["<CR>"] = cmp.mapping.confirm({ select = true }), -- confirm selection
-          ["<Tab>"] = cmp.mapping.select_next_item(),      -- next item
-          ["<S-Tab>"] = cmp.mapping.select_prev_item(),    -- previous item
+          ["<C-Space>"] = cmp.mapping.complete(), -- trigger completion
+          ["<CR>"] = cmp.mapping.confirm { select = true }, -- confirm selection
+          ["<Tab>"] = cmp.mapping.select_next_item(), -- next item
+          ["<S-Tab>"] = cmp.mapping.select_prev_item(), -- previous item
         },
         sources = {
           { name = "nvim_lsp" },
@@ -28,24 +28,24 @@ return {
           { name = "buffer" },
           { name = "path" },
         },
-      })
+      }
 
       -- Setup for search (/) and backward search (?)
       cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
-          { name = "buffer" }
-        }
+          { name = "buffer" },
+        },
       })
 
       -- Setup for command-line (:)
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-          { name = "path" }
+          { name = "path" },
         }, {
-          { name = "cmdline" }
-        })
+          { name = "cmdline" },
+        }),
       })
     end,
   },
@@ -114,8 +114,8 @@ return {
     opts = {},
     -- stylua: ignore
     keys = {
-      { "zk",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-      { "Zk",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
       { "r",      mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
       { "R",      mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-s>",  mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
