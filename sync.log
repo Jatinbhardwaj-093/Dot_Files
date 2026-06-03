@@ -1302,3 +1302,22 @@ To https://github.com/Jatinbhardwaj-093/Dot_Files.git
 [2026-06-03 10:09:28] Synced .config/sketchybar
 [2026-06-03 10:09:28] Synced .config/yazi TOML files
 [2026-06-03 10:09:28] Changes detected in dotfiles. Committing and pushing...
+To https://github.com/Jatinbhardwaj-093/Dot_Files.git
+   52d87fb..15603ef  main -> main
+[2026-06-03 10:09:29] Successfully pushed changes to GitHub.
+[2026-06-03 10:09:29] Dotfiles sync completed.
+[2026-06-03 11:13:44] Starting dotfiles sync...
+[2026-06-03 11:13:45] Synced .zshrc
+[2026-06-03 11:13:45] Synced .tmux.conf
+[2026-06-03 11:13:45] Synced starship.toml
+[2026-06-03 11:13:45] Synced vim_init.lua
+[2026-06-03 11:13:46] Synced vim_mappings.lua
+[2026-06-03 11:13:46] Synced vim_float_term.lua
+[2026-06-03 11:13:47] Synced .config/nvim/lua/plugins
+[2026-06-03 11:13:47] Synced .ghostty_config
+[2026-06-03 11:13:47] Synced .aerospace.toml
+[2026-06-03 11:13:47] Synced .config/aerospace
+[2026-06-03 11:13:47] Synced .config/borders
+[2026-06-03 11:13:47] Synced .config/sketchybar
+[2026-06-03 11:13:47] Synced .config/yazi TOML files
+[2026-06-03 11:13:48] Changes detected in dotfiles. Committing and pushing...
