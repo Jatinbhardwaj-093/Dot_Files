@@ -1662,3 +1662,22 @@ fatal: unable to access 'https://github.com/Jatinbhardwaj-093/Dot_Files.git/': C
 [2026-06-05 20:11:01] Synced .config/sketchybar
 [2026-06-05 20:11:01] Synced .config/yazi TOML files
 [2026-06-05 20:11:01] Changes detected in dotfiles. Committing and pushing...
+To https://github.com/Jatinbhardwaj-093/Dot_Files.git
+   353a35e..428f4d1  main -> main
+[2026-06-05 20:11:03] Successfully pushed changes to GitHub.
+[2026-06-05 20:11:03] Dotfiles sync completed.
+[2026-06-06 19:38:28] Starting dotfiles sync...
+[2026-06-06 19:38:28] Synced .zshrc
+[2026-06-06 19:38:28] Synced .tmux.conf
+[2026-06-06 19:38:29] Synced starship.toml
+[2026-06-06 19:38:29] Synced vim_init.lua
+[2026-06-06 19:38:29] Synced vim_mappings.lua
+[2026-06-06 19:38:29] Synced vim_float_term.lua
+[2026-06-06 19:38:30] Synced .config/nvim/lua/plugins
+[2026-06-06 19:38:30] Synced .ghostty_config
+[2026-06-06 19:38:31] Synced .aerospace.toml
+[2026-06-06 19:38:31] Synced .config/aerospace
+[2026-06-06 19:38:31] Synced .config/borders
+[2026-06-06 19:38:31] Synced .config/sketchybar
+[2026-06-06 19:38:31] Synced .config/yazi TOML files
+[2026-06-06 19:38:31] Changes detected in dotfiles. Committing and pushing...
