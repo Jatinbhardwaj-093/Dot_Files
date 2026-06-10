@@ -81,7 +81,7 @@ alias activate="source .venv/bin/activate"
 
 # clear alias
 alias clr="clear"
-alias yz = "yazi"
+alias yz="yazi"
 
 # fzf 
 # called from ~/scripts/
