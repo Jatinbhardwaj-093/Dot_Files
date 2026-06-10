@@ -145,7 +145,7 @@ alias fgrep="grep -r '' . | fzf"
 alias ftmux='tmux switch-client -t $(tmux list-sessions -F "#S" | fzf)'
 
 # lazygit
-alias lg="lazygit"
+alias lz = "lazygit"
 
 # obsidian icloud path
 alias sethvault="cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/sethVault/"
