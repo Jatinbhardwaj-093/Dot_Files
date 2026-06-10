@@ -154,6 +154,9 @@ alias sethvault="cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/set
 # unbind ctrl g in terminal
 bindkey -r "^G"
 
+# accept zsh-autosuggestions with ctrl+l
+bindkey '^L' autosuggest-accept
+
 
 # bun completions
 [ -s "/Users/personal/.bun/_bun" ] && source "/Users/personal/.bun/_bun"
