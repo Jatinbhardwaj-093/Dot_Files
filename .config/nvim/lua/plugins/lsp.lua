@@ -1,12 +1,6 @@
 -- ~/.config/nvim/lua/plugins/lsp.lua
 
 return {
-  -- Code formatting configuration using Conform
-  {
-    "stevearc/conform.nvim",
-    event = "BufWritePre",
-    opts = require "configs.conform",
-  },
 
   -- LSP core configuration
   {
