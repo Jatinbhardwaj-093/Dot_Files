@@ -8,7 +8,8 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Repository directory
 REPO_DIR="/Users/jatinbhardwaj/Github/dot_files"
-LOG_FILE="$REPO_DIR/sync.log"
+LOG_FILE="$HOME/.local/state/dotfiles_sync.log"
+mkdir -p "$(dirname "$LOG_FILE")"
 
 # Function to log messages
 log() {
@@ -79,7 +80,7 @@ fi
 # 8. Aerospace folder
 if [ -d "$HOME/.config/aerospace" ]; then
     mkdir -p "$REPO_DIR/.config/aerospace"
-    rsync -av --exclude '.DS_Store' --delete "$HOME/.config/aerospace/" "$REPO_DIR/.config/aerospace/"
+    rsync -av --exclude '.DS_Store' --exclude 'layout_state_*' --delete "$HOME/.config/aerospace/" "$REPO_DIR/.config/aerospace/"
     log "Synced .config/aerospace"
 fi
 
