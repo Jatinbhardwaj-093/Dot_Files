@@ -10,7 +10,7 @@ ACCENT_COLOR=$YELLOW
 
 sketchybar --bar \
   height=32 \
-  color=0xdd1d2021 \
+  color=0xdd1e2122 \
   blur_radius=40 \
   corner_radius=14 \
   margin=10 \
