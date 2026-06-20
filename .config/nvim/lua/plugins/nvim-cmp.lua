@@ -12,6 +12,9 @@ return {
     local cmp = require "cmp"
 
     cmp.setup {
+      view = {
+        entries = { name = "custom", selection_order = "near_cursor" },
+      },
       mapping = {
         ["<C-Space>"] = cmp.mapping.complete(), -- trigger completion
         ["<CR>"] = cmp.mapping.confirm { select = true }, -- confirm selection
@@ -28,7 +31,26 @@ return {
 
     -- Setup for search (/) and backward search (?)
     cmp.setup.cmdline({ "/", "?" }, {
-      mapping = cmp.mapping.preset.cmdline(),
+      mapping = cmp.mapping.preset.cmdline({
+        ["<Tab>"] = {
+          c = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end,
+        },
+        ["<S-Tab>"] = {
+          c = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end,
+        },
+      }),
       sources = {
         { name = "buffer" },
       },
@@ -36,7 +58,26 @@ return {
 
     -- Setup for command-line (:)
     cmp.setup.cmdline(":", {
-      mapping = cmp.mapping.preset.cmdline(),
+      mapping = cmp.mapping.preset.cmdline({
+        ["<Tab>"] = {
+          c = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end,
+        },
+        ["<S-Tab>"] = {
+          c = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end,
+        },
+      }),
       sources = cmp.config.sources({
         { name = "path" },
       }, {

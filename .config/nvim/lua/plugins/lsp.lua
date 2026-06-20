@@ -41,6 +41,21 @@ return {
 
       -- Hover keymap
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover Info" })
+
+      -- Peek definition keymap (VS Code gp style)
+      vim.keymap.set("n", "gp", function()
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        local client = clients[1]
+        local offset_encoding = client and client.offset_encoding or "utf-16"
+        local params = vim.lsp.util.make_position_params(0, offset_encoding)
+        vim.lsp.buf_request(0, "textDocument/definition", params, function(_, result)
+          if not result or vim.tbl_isempty(result) then
+            return
+          end
+          local target = result[1] or result
+          vim.lsp.util.preview_location(target, { border = "rounded" })
+        end)
+      end, { desc = "LSP Peek Definition", silent = true })
     end,
   },
 
