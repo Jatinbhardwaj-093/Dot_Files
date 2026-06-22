@@ -40,47 +40,32 @@ for sid in "${SORTED_WORKSPACES[@]}"; do
       10) icon_str="󰎡" ;;
       *) icon_str="$sid" ;;
     esac
-    label_str=""
-    icon_drawing="on"
-    label_drawing="off"
-    
-    icon_padding_left=10
-    icon_padding_right=10
-    label_padding_left=0
-    label_padding_right=0
+    icon_font="JetBrainsMono Nerd Font:Bold:14.0"
   else
     # It's a named space
-    label_str="$sid"
-    icon_drawing="on"
-    label_drawing="on"
-    
-    icon_padding_left=10
-    icon_padding_right=6
-    label_padding_left=0
-    label_padding_right=10
-    
     case "$sid" in
-      "Terminal") icon_str="󰆍" ;;
-      "Browser") icon_str="󰖟" ;;
-      "Chat") icon_str="󰭹" ;;
-      "Obsidian") icon_str="󱞎" ;;
-      "Research") icon_str="󰗚" ;;
-      *) icon_str="󰣆" ;; # default icon for unknown named spaces
+      "Terminal") icon_str=":ghostty:" ;;
+      "Browser") icon_str=":safari:" ;;
+      "Chat") icon_str=":discord:" ;;
+      "Obsidian") icon_str=":obsidian:" ;;
+      "Research") icon_str=":zotero:" ;;
+      *) icon_str=":default:" ;; # default icon for unknown named spaces
     esac
+    icon_font="sketchybar-app-font:Regular:15.0"
   fi
 
   sketchybar --add item space.$sid left \
     --set space.$sid \
     icon="$icon_str" \
-    icon.drawing="$icon_drawing" \
-    icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
-    icon.padding_left="$icon_padding_left" \
-    icon.padding_right="$icon_padding_right" \
-    label="$label_str" \
-    label.drawing="$label_drawing" \
-    label.font="JetBrainsMono Nerd Font:Bold:13.0" \
-    label.padding_left="$label_padding_left" \
-    label.padding_right="$label_padding_right" \
+    icon.drawing="on" \
+    icon.font="$icon_font" \
+    icon.padding_left=10 \
+    icon.padding_right=10 \
+    label="" \
+    label.drawing="off" \
+    label.font="sketchybar-app-font:Regular:15.0" \
+    label.padding_left=5 \
+    label.padding_right=10 \
     click_script="aerospace workspace $sid" \
     script="$PLUGIN_DIR/space.sh $sid" \
     update_freq=1 \

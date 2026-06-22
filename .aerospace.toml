@@ -105,6 +105,9 @@ alt-ctrl-cmd-e = 'exec-and-forget open -a Finder'
 # Dictionary
 alt-ctrl-cmd-d = 'exec-and-forget open -a Dictionary'
 
+# Sound Settings
+alt-ctrl-cmd-s = 'exec-and-forget open x-apple.systempreferences:com.apple.Sound-Settings.extension'
+
 
 # Service Mode
 alt-ctrl-cmd-semicolon = 'mode service'

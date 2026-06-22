@@ -5,8 +5,12 @@ source "$HOME/.config/sketchybar/colors.sh"
 
 SPACE_NAME="${NAME#space.}"
 
-FOCUSED=$(aerospace list-workspaces --focused)
-WINDOW_COUNT=$(aerospace list-windows --workspace "$SPACE_NAME" | wc -l | tr -d ' ')
+FOCUSED=$(aerospace list-workspaces --focused 2>/dev/null)
+if [ -z "$FOCUSED" ]; then
+  FOCUSED="1"
+fi
+
+WINDOW_COUNT=$(aerospace list-windows --workspace "$SPACE_NAME" 2>/dev/null | wc -l | tr -d ' ')
 
 if [ "$SPACE_NAME" = "$FOCUSED" ]; then
   # Current active workspace
