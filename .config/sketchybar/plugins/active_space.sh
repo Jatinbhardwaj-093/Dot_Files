@@ -19,4 +19,4 @@ if [ -n "$APPS" ]; then
   done <<< "$APPS"
 fi
 
-sketchybar --set "$NAME" icon="$ICON_STR" label="$FOCUSED_WORKSPACE"
+sketchybar --set "$NAME" icon="$ICON_STR" label=""

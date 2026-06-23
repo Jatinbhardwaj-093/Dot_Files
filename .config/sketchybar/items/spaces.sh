@@ -6,7 +6,7 @@ source "$HOME/.config/sketchybar/colors.sh"
 ALL_WORKSPACES=$(aerospace list-workspaces --all)
 
 # Preferred ordering
-ORDER=("Terminal" "Browser" "Chat" "Obsidian" "Research" "1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
+ORDER=("Terminal" "Browser" "Chat" "Mail" "Obsidian" "Research" "1" "2" "4" "5" "6" "7" "8" "9" "10")
 
 # Collect ordered workspaces
 SORTED_WORKSPACES=()
@@ -57,14 +57,14 @@ for sid in "${SORTED_WORKSPACES[@]}"; do
   sketchybar --add item space.$sid left \
     --set space.$sid \
     icon="$icon_str" \
-    icon.drawing="on" \
+    icon.drawing="off" \
     icon.font="$icon_font" \
     icon.padding_left=10 \
     icon.padding_right=10 \
-    label="" \
-    label.drawing="off" \
-    label.font="sketchybar-app-font:Regular:15.0" \
-    label.padding_left=5 \
+    label="$sid" \
+    label.drawing="on" \
+    label.font="JetBrainsMono Nerd Font:Bold:13.0" \
+    label.padding_left=10 \
     label.padding_right=10 \
     click_script="aerospace workspace $sid" \
     script="$PLUGIN_DIR/space.sh $sid" \

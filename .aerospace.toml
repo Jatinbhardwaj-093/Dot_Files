@@ -21,7 +21,7 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 automatically-unhide-macos-hidden-apps = false
 
-persistent-workspaces = ["Terminal", "Browser", "Chat", "Obsidian", "Research", "1", "2", "3"]
+persistent-workspaces = ["Terminal", "Browser", "Chat", "Mail", "Obsidian", "Research", "1", "2"]
 
 on-mode-changed = []
 
@@ -73,23 +73,23 @@ alt-ctrl-cmd-equal = 'resize smart +20'
 # Workspaces
 alt-ctrl-cmd-1 = 'workspace 1'
 alt-ctrl-cmd-2 = 'workspace 2'
-alt-ctrl-cmd-3 = 'workspace 3'
 
 # Named Workspaces
 alt-ctrl-cmd-t = ['workspace Terminal', 'exec-and-forget open -a Ghostty']
 alt-ctrl-cmd-b = ['workspace Browser', 'exec-and-forget open -a Safari']
 alt-ctrl-cmd-c = ['workspace Chat', 'exec-and-forget open -a Legcord']
+alt-ctrl-cmd-m = ['workspace Mail', 'exec-and-forget open -a Thunderbird']
 alt-ctrl-cmd-n = ['workspace Obsidian', 'exec-and-forget open -a Obsidian']
 alt-ctrl-cmd-r = ['workspace Research', 'exec-and-forget open -a Zotero']
 
 # Move Window To Workspace (And switch focus to it)
 alt-ctrl-cmd-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-ctrl-cmd-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
-alt-ctrl-cmd-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
 
 alt-ctrl-cmd-shift-t = ['move-node-to-workspace Terminal', 'workspace Terminal']
 alt-ctrl-cmd-shift-b = ['move-node-to-workspace Browser', 'workspace Browser']
 alt-ctrl-cmd-shift-c = ['move-node-to-workspace Chat', 'workspace Chat']
+alt-ctrl-cmd-shift-m = ['move-node-to-workspace Mail', 'workspace Mail']
 alt-ctrl-cmd-shift-n = ['move-node-to-workspace Obsidian', 'workspace Obsidian']
 alt-ctrl-cmd-shift-r = ['move-node-to-workspace Research', 'workspace Research']
 
@@ -146,6 +146,10 @@ run = 'move-node-to-workspace Terminal'
 [[on-window-detected]]
 if.app-id = 'app.legcord.Legcord'
 run = 'move-node-to-workspace Chat'
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.thunderbird'
+run = 'move-node-to-workspace Mail'
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
