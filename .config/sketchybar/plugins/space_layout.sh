@@ -11,11 +11,19 @@ fi
 win_layouts=$(aerospace list-windows --workspace "$focused_ws" --format "%{window-layout}" 2>/dev/null)
 
 if [ -n "$win_layouts" ]; then
-  # Check if any window is tiling (i.e. h_tiles, v_tiles, accordion)
-  if echo "$win_layouts" | grep -qE "tiles|accordion"; then
-    layout_mode="Tiling"
-  else
+  # Determine specific layout mode
+  if echo "$win_layouts" | grep -q "h_tiles"; then
+    layout_mode="h_tiles"
+  elif echo "$win_layouts" | grep -q "v_tiles"; then
+    layout_mode="v_tiles"
+  elif echo "$win_layouts" | grep -q "h_accordion"; then
+    layout_mode="h_accordion"
+  elif echo "$win_layouts" | grep -q "v_accordion"; then
+    layout_mode="v_accordion"
+  elif echo "$win_layouts" | grep -q "floating"; then
     layout_mode="Floating"
+  else
+    layout_mode="Tiling"
   fi
 else
   # No windows: check state file, default to Tiling
@@ -27,26 +35,31 @@ else
   fi
 fi
 
-if [ "$layout_mode" = "Tiling" ]; then
+if [ "$layout_mode" = "h_tiles" ] || [ "$layout_mode" = "h_accordion" ]; then
   COLOR=$ORANGE
-  ICON="󰕰"
-  LABEL="Tiling"
-else
+  ICON="󰕰" 
+  LABEL="H-Tiles"
+elif [ "$layout_mode" = "v_tiles" ] || [ "$layout_mode" = "v_accordion" ]; then
+  COLOR=$ORANGE
+  ICON="󰕴" 
+  LABEL="V-Tiles"
+elif [ "$layout_mode" = "Floating" ]; then
   COLOR=$AQUA
-  ICON="󰖲"
+  ICON="󰖲" 
   LABEL="Floating"
+else
+  COLOR=$ORANGE
+  ICON="󰕰" 
+  LABEL="Tiling"
 fi
 
+# Handle Mouse Hover
 if [ "$SENDER" = "mouse.entered" ]; then
-  sketchybar --set $NAME background.color=$BG2 background.border_color=$COLOR
+  sketchybar --set "$NAME" background.color="$BG2" background.border_color="$COLOR"
   exit 0
 elif [ "$SENDER" = "mouse.exited" ]; then
-  sketchybar --set $NAME background.color=0x26504945 background.border_color=0x14ebdbb2
+  sketchybar --set "$NAME" background.color="0x26504945" background.border_color="0x14ebdbb2"
   exit 0
 fi
 
-sketchybar --set $NAME \
-             icon="$ICON" \
-             icon.color=$COLOR \
-             label.color=$COLOR \
-             label="$LABEL"
+sketchybar --set space_layout icon="$ICON" icon.color="$COLOR" label="$LABEL" label.color="$COLOR"

@@ -24,50 +24,18 @@ for w in $ALL_WORKSPACES; do
 done
 
 for sid in "${SORTED_WORKSPACES[@]}"; do
-  # Determine label and icon based on whether it is a named space or a numbered space
-  if [[ "$sid" =~ ^[0-9]+$ ]]; then
-    # It's a number - use outline digits
-    case "$sid" in
-      1) icon_str="󰎤" ;;
-      2) icon_str="󰎧" ;;
-      3) icon_str="󰎪" ;;
-      4) icon_str="󰎭" ;;
-      5) icon_str="󰎱" ;;
-      6) icon_str="󰎴" ;;
-      7) icon_str="󰎷" ;;
-      8) icon_str="󰎺" ;;
-      9) icon_str="󰎽" ;;
-      10) icon_str="󰎡" ;;
-      *) icon_str="$sid" ;;
-    esac
-    icon_font="JetBrainsMono Nerd Font:Bold:14.0"
-  else
-    # It's a named space
-    case "$sid" in
-      "Terminal") icon_str=":ghostty:" ;;
-      "Browser") icon_str=":safari:" ;;
-      "Chat") icon_str=":discord:" ;;
-      "Obsidian") icon_str=":obsidian:" ;;
-      "Research") icon_str=":zotero:" ;;
-      *) icon_str=":default:" ;; # default icon for unknown named spaces
-    esac
-    icon_font="sketchybar-app-font:Regular:15.0"
-  fi
-
   sketchybar --add item space.$sid left \
     --set space.$sid \
-    icon="$icon_str" \
-    icon.drawing="off" \
-    icon.font="$icon_font" \
-    icon.padding_left=10 \
-    icon.padding_right=10 \
-    label="$sid" \
-    label.drawing="on" \
-    label.font="JetBrainsMono Nerd Font:Bold:13.0" \
-    label.padding_left=10 \
-    label.padding_right=10 \
+    icon="$sid" \
+    icon.drawing="on" \
+    icon.font="JetBrainsMono Nerd Font:Bold:11.5" \
+    icon.padding_left=8 \
+    icon.padding_right=8 \
+    label.drawing="off" \
+    background.padding_left=3 \
+    background.padding_right=3 \
     click_script="aerospace workspace $sid" \
     script="$PLUGIN_DIR/space.sh $sid" \
-    update_freq=1 \
-    --subscribe space.$sid aerospace_workspace_change front_app_switched mouse.entered mouse.exited
+    update_freq=0 \
+    --subscribe space.$sid aerospace_workspace_change front_app_switched window_change mouse.entered mouse.exited
 done

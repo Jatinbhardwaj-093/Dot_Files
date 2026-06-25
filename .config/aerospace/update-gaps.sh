@@ -38,7 +38,9 @@ if [ "$WIDTH" -gt 2000 ]; then
     SK_MARGIN=16
     SK_Y_OFFSET=16
     SK_PADDING=16
-    TARGET_TOP=68 # 16 (y_offset) + 38 (height) + 14 (gap)
+    BAR_HEIGHT=36
+    TARGET_LEFT=16
+    TARGET_TOP=68 # 16 (y_offset) + 36 (bar height) + 16 (gap)
 else
     # Space-saving laptop screen padding
     NEW_INNER=10
@@ -46,7 +48,9 @@ else
     SK_MARGIN=10
     SK_Y_OFFSET=10
     SK_PADDING=10
-    TARGET_TOP=54 # 10 (y_offset) + 38 (height) + 6 (gap)
+    BAR_HEIGHT=32
+    TARGET_LEFT=10
+    TARGET_TOP=52 # 10 (y_offset) + 32 (bar height) + 10 (gap)
 fi
 
 NEW_TOP=$((TARGET_TOP - MENU_BAR_HEIGHT))
@@ -54,26 +58,28 @@ if [ "$NEW_TOP" -lt 0 ]; then
     NEW_TOP=0
 fi
 
+NEW_LEFT=$TARGET_LEFT
+
 CONFIG_FILE="$HOME/.aerospace.toml"
 
 # Read the current gaps from the config file using POSIX compatible character class
 CURRENT_TOP=$(grep -E "^[[:space:]]*outer.top[[:space:]]*=" "$CONFIG_FILE" | grep -o -E "[0-9]+")
+CURRENT_LEFT=$(grep -E "^[[:space:]]*outer.left[[:space:]]*=" "$CONFIG_FILE" | grep -o -E "[0-9]+")
 CURRENT_INNER=$(grep -E "^[[:space:]]*inner.horizontal[[:space:]]*=" "$CONFIG_FILE" | grep -o -E "[0-9]+")
 
 # Update SketchyBar dynamically at runtime (instantaneous, no flicker)
 sketchybar --bar \
   margin="$SK_MARGIN" \
   y_offset="$SK_Y_OFFSET" \
-  padding_left="$SK_PADDING" \
-  padding_right="$SK_PADDING" 2>/dev/null
+  height="$BAR_HEIGHT" 2>/dev/null
 
 # If current settings are different, perform atomic update to avoid reload loops
-if [ "$CURRENT_TOP" != "$NEW_TOP" ] || [ "$CURRENT_INNER" != "$NEW_INNER" ]; then
+if [ "$CURRENT_TOP" != "$NEW_TOP" ] || [ "$CURRENT_LEFT" != "$NEW_LEFT" ] || [ "$CURRENT_INNER" != "$NEW_INNER" ]; then
     # Update all gaps atomically in a single pass to prevent redundant AeroSpace reloads
     sed -i '' \
       -e "s/\(inner.horizontal[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_INNER/" \
       -e "s/\(inner.vertical[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_INNER/" \
-      -e "s/\(outer.left[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
+      -e "s/\(outer.left[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_LEFT/" \
       -e "s/\(outer.right[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
       -e "s/\(outer.bottom[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
       -e "s/\(outer.top[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_TOP/" \

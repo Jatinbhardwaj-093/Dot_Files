@@ -9,6 +9,5 @@ elif [ "$SENDER" = "mouse.exited" ]; then
   exit 0
 fi
 
-DATE="$(date '+%a %d %b  %I:%M %p')"
-
-sketchybar --set $NAME label="$DATE"
+DATE="$(date '+%I:%M %p • %a, %b %d')"
+sketchybar --set clock label="$DATE"

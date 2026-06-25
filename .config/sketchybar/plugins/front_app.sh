@@ -1,10 +1,14 @@
-#!/bin/sh
+#!/bin/bash
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-# Some events send additional information specific to the event in the $INFO
-# variable. E.g. the front_app_switched event sends the name of the newly
-# focused application in the $INFO variable:
-# https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
+source "$HOME/.config/sketchybar/colors.sh"
+source "$HOME/.config/sketchybar/icon_map.sh"
 
 if [ "$SENDER" = "front_app_switched" ]; then
-  sketchybar --set "$NAME" label="$INFO"
+  APP_NAME="$INFO"
+else
+  APP_NAME=$(aerospace list-windows --focused --format "%{app-name}" 2>/dev/null)
 fi
+
+__icon_map "$APP_NAME"
+sketchybar --set "$NAME" icon="$icon_result"

@@ -5,16 +5,18 @@ PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 
 sketchybar --add item apple left \
            --set apple icon="" \
-                 icon.font="JetBrainsMono Nerd Font:Bold:18.0" \
+                 icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
                  icon.color=$FG0 \
-                 background.color=$TRANSPARENT \
-                 background.corner_radius=8 \
-                 background.height=26 \
-                 icon.padding_left=12 \
-                 icon.padding_right=12 \
+                 background.color=0xff282b2c \
+                 background.border_width=1 \
+                 background.border_color=0x22ebdbb2 \
+                 background.corner_radius=6 \
+                 background.height=22 \
+                 icon.padding_left=8 \
+                 icon.padding_right=8 \
                  label.drawing=off \
                  popup.drawing=off \
-                 popup.background.color=0xcc1d2021 \
+                 popup.background.color=0xe61d2021 \
                  popup.background.corner_radius=12 \
                  popup.background.border_width=1 \
                  popup.background.border_color=0x22ebdbb2 \

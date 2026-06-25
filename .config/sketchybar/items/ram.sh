@@ -6,12 +6,12 @@ sketchybar --add item ram right \
                  update_freq=5 \
                  icon="󰘚" \
                  icon.color=$BLUE \
-                 label.color=$BLUE \
-                 padding_left=4 \
-                 padding_right=4 \
-                 icon.padding_left=6 \
-                 icon.padding_right=2 \
-                 label.padding_left=2 \
-                 label.padding_right=6 \
+                 label.drawing=off \
+                 padding_left=6 \
+                 padding_right=0 \
+                 icon.padding_left=0 \
+                 icon.padding_right=0 \
+                 icon.width=26 \
+                 icon.align=center \
                  script="$PLUGIN_DIR/ram.sh" \
            --subscribe ram mouse.entered mouse.exited

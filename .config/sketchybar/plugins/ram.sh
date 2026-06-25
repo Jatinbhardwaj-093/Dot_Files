@@ -38,7 +38,4 @@ if [ -n "$PCT" ]; then
   fi
 fi
 
-sketchybar --set $NAME \
-             icon.color=$COLOR \
-             label.color=$COLOR \
-             label="${PCT}% (${USED_GB}G)"
+sketchybar --set ram icon.color=$COLOR label="${PCT}%" label.color=$COLOR

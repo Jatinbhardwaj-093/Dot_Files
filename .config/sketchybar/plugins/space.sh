@@ -14,45 +14,53 @@ WINDOW_COUNT=$(aerospace list-windows --workspace "$SPACE_NAME" 2>/dev/null | wc
 
 if [ "$SPACE_NAME" = "$FOCUSED" ]; then
   # Current active workspace
-  sketchybar --set "$NAME" \
-    background.color=$YELLOW \
-    background.border_width=0 \
-    icon.color=$BLACK \
-    label.color=$BLACK
+  if [ "$SENDER" = "mouse.entered" ]; then
+    sketchybar --set "$NAME" \
+      background.color="$ORANGE" \
+      background.border_width=0 \
+      icon.color="$BLACK" \
+      label.color="$BLACK"
+  else
+    sketchybar --set "$NAME" \
+      background.color="$YELLOW" \
+      background.border_width=0 \
+      icon.color="$BLACK" \
+      label.color="$BLACK"
+  fi
 
 elif [ "$WINDOW_COUNT" -gt 0 ]; then
   # Workspace has windows/apps
   if [ "$SENDER" = "mouse.entered" ]; then
     sketchybar --set "$NAME" \
-      background.color=0x44504945 \
-      background.border_width=2 \
-      background.border_color=$YELLOW \
-      icon.color=$FG0 \
-      label.color=$FG0
+      background.color="$BG2" \
+      background.border_width=1 \
+      background.border_color="$YELLOW" \
+      icon.color="$FG0" \
+      label.color="$FG0"
   else
     sketchybar --set "$NAME" \
-      background.color=$TRANSPARENT \
-      background.border_width=2 \
-      background.border_color=$YELLOW \
-      icon.color=$FG1 \
-      label.color=$FG1
+      background.color="0xff282b2c" \
+      background.border_width=1 \
+      background.border_color="0x44ebdbb2" \
+      icon.color="$FG0" \
+      label.color="$FG0"
   fi
 
 else
   # Empty workspace
   if [ "$SENDER" = "mouse.entered" ]; then
     sketchybar --set "$NAME" \
-      background.color=0x3c504945 \
+      background.color="$BG1" \
       background.border_width=1 \
-      background.border_color=$GRAY \
-      icon.color=$FG2 \
-      label.color=$FG2
+      background.border_color="$GRAY" \
+      icon.color="$FG1" \
+      label.color="$FG1"
   else
     sketchybar --set "$NAME" \
-      background.color=0x26504945 \
+      background.color="0x441d2021" \
       background.border_width=1 \
-      background.border_color=0x14ebdbb2 \
-      icon.color=$GRAY \
-      label.color=$GRAY
+      background.border_color="0x14ebdbb2" \
+      icon.color="$GRAY" \
+      label.color="$GRAY"
   fi
 fi

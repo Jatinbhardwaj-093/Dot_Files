@@ -60,8 +60,4 @@ else
   fi
 fi
 
-sketchybar --set $NAME \
-             icon="$ICON" \
-             icon.color=$COLOR \
-             label.color=$COLOR \
-             label="${PERCENTAGE}%"
+sketchybar --set battery icon="$ICON" icon.color=$COLOR label="${PERCENTAGE}%" label.color=$COLOR

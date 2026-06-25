@@ -26,7 +26,4 @@ fi
 
 printf -v FMT_LOAD "%.1f%%" "$CPU_LOAD" 2>/dev/null || FMT_LOAD="${CPU_LOAD}%"
 
-sketchybar --set $NAME \
-             icon.color=$COLOR \
-             label.color=$COLOR \
-             label="$FMT_LOAD"
+sketchybar --set cpu icon.color=$COLOR label="$FMT_LOAD" label.color=$COLOR
