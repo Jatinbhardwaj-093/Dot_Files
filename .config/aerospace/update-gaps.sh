@@ -40,7 +40,7 @@ if [ "$WIDTH" -gt 2000 ]; then
     SK_PADDING=16
     BAR_HEIGHT=36
     TARGET_LEFT=16
-    TARGET_TOP=68 # 16 (y_offset) + 36 (bar height) + 16 (gap)
+    TARGET_TOP=76 # 16 (y_offset) + 36 (bar height) + 24 (gap)
 else
     # Space-saving laptop screen padding
     NEW_INNER=10
@@ -50,10 +50,10 @@ else
     SK_PADDING=10
     BAR_HEIGHT=32
     TARGET_LEFT=10
-    TARGET_TOP=52 # 10 (y_offset) + 32 (bar height) + 10 (gap)
+    TARGET_TOP=60 # 10 (y_offset) + 32 (bar height) + 18 (gap)
 fi
 
-NEW_TOP=$((TARGET_TOP - MENU_BAR_HEIGHT))
+NEW_TOP=$TARGET_TOP
 if [ "$NEW_TOP" -lt 0 ]; then
     NEW_TOP=0
 fi
