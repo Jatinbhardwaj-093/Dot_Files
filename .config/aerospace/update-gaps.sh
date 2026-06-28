@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Query the focused display's physical width and menu bar height using JXA
+# Query the focused display's physical width, menu bar height, and display type using JXA
 DISPLAY_INFO=$(osascript -l JavaScript <<EOF 2>/dev/null
 ObjC.import("Cocoa");
 var mainScreen = $.NSScreen.mainScreen;
@@ -9,9 +9,11 @@ if (mainScreen) {
     var visible = mainScreen.visibleFrame;
     var m_height = frame.size.height - (visible.size.height + visible.origin.y);
     var width = frame.size.width;
-    JSON.stringify({ width: Math.round(width), m_height: Math.round(m_height) });
+    var name = ObjC.unwrap(mainScreen.localizedName) || "";
+    var isBuiltin = name.toLowerCase().indexOf("built-in") !== -1 || name.toLowerCase().indexOf("retina") !== -1;
+    JSON.stringify({ width: Math.round(width), m_height: Math.round(m_height), is_builtin: isBuiltin });
 } else {
-    JSON.stringify({ width: 0, m_height: 0 });
+    JSON.stringify({ width: 0, m_height: 0, is_builtin: false });
 }
 EOF
 )
@@ -19,6 +21,7 @@ EOF
 # Parse JSON values
 WIDTH=$(echo "$DISPLAY_INFO" | grep -o -E '"width":[0-9]+' | cut -d: -f2)
 MENU_BAR_HEIGHT=$(echo "$DISPLAY_INFO" | grep -o -E '"m_height":[0-9]+' | cut -d: -f2)
+IS_BUILTIN=$(echo "$DISPLAY_INFO" | grep -o -E '"is_builtin":(true|false)' | cut -d: -f2)
 
 # Fallback values
 if [ -z "$WIDTH" ] || [ "$WIDTH" -eq 0 ]; then
@@ -29,10 +32,10 @@ if [ -z "$MENU_BAR_HEIGHT" ]; then
 fi
 
 # Define adaptive geometry boundaries
-# Laptop/Small Screen: Width <= 2000
-# Large Display: Width > 2000
-if [ "$WIDTH" -gt 2000 ]; then
-    # Premium large screen padding
+# Desktop display: external screen or width > 2000
+# Mac original display: built-in screen with width <= 2000
+if [ "$IS_BUILTIN" = "false" ] || [ "$WIDTH" -gt 2000 ]; then
+    # External / Desktop Monitor padding
     NEW_INNER=16
     NEW_OUTER=16
     SK_MARGIN=16
@@ -40,9 +43,9 @@ if [ "$WIDTH" -gt 2000 ]; then
     SK_PADDING=16
     BAR_HEIGHT=36
     TARGET_LEFT=16
-    TARGET_TOP=76 # 16 (y_offset) + 36 (bar height) + 24 (gap)
+    TARGET_TOP=50
 else
-    # Space-saving laptop screen padding
+    # Mac original / built-in laptop display padding
     NEW_INNER=10
     NEW_OUTER=10
     SK_MARGIN=10
@@ -50,7 +53,7 @@ else
     SK_PADDING=10
     BAR_HEIGHT=32
     TARGET_LEFT=10
-    TARGET_TOP=60 # 10 (y_offset) + 32 (bar height) + 18 (gap)
+    TARGET_TOP=16
 fi
 
 NEW_TOP=$TARGET_TOP
