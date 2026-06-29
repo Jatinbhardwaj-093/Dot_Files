@@ -55,14 +55,14 @@ sketchybar --default "${default[@]}"
 ##### Left Items: Workspaces Only #####
 source "$HOME/.config/sketchybar/items/spaces.sh"
 
-##### Center Items: Front App Symbol Only #####
-sketchybar --add item front_app center \
-           --set front_app \
+##### Center Items: All Open Apps in Focused Workspace #####
+sketchybar --add item space_windows center \
+           --set space_windows \
                  icon.drawing=on \
                  icon.font="sketchybar-app-font:Regular:15.0" \
                  icon.color=$AQUA \
-                 icon.padding_left=8 \
-                 icon.padding_right=8 \
+                 icon.padding_left=10 \
+                 icon.padding_right=10 \
                  label.drawing=off \
                  background.color=0xff282b2c \
                  background.border_width=1 \
@@ -71,8 +71,8 @@ sketchybar --add item front_app center \
                  background.height=22 \
                  padding_left=10 \
                  padding_right=10 \
-                 script="$PLUGIN_DIR/front_app.sh" \
-           --subscribe front_app front_app_switched aerospace_workspace_change
+                 script="$PLUGIN_DIR/space_windows.sh" \
+           --subscribe space_windows front_app_switched aerospace_workspace_change window_change
 
 ##### Right Items: Arranged from Right to Left #####
 # Note: SketchyBar places right items starting from the far right edge in the order they are added.
