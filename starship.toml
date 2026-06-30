@@ -4,7 +4,7 @@ add_newline = false
 palette = "gruvbox_dark"
 
 # Left Prompt: extremely clean directory and custom prompt character
-format = """$directory$character"""
+format = """$custom$directory$character"""
 
 # Right Prompt: show git, language runtimes, cmd duration, and exit status
 right_format = """$cmd_duration$git_branch$git_status$python$nodejs$golang$rust$aws$kubernetes$docker_context$status"""
@@ -59,7 +59,14 @@ deleted = "✘"
 [python]
 symbol = " "
 style = "bold yellow"
-format = 'via [$symbol$version( \($virtualenv\))]($style) '
+format = 'via [$symbol$version]($style) '
+
+[custom.venv]
+command = 'echo "${VIRTUAL_ENV:-$CONDA_DEFAULT_ENV}" | xargs basename'
+when = 'test -n "$VIRTUAL_ENV" -o -n "$CONDA_DEFAULT_ENV"'
+format = '([\($output\)]($style) )'
+style = "bold yellow"
+
 
 [nodejs]
 symbol = "󰎙 "
