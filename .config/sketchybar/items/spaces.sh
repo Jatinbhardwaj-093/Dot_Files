@@ -19,12 +19,12 @@ Chat
 Mail
 Obsidian
 Research
-1
-2"
+Music
+1"
 fi
 
 # Preferred ordering
-ORDER=("Terminal" "Browser" "Chat" "Mail" "Obsidian" "Research" "1" "2" "4" "5" "6" "7" "8" "9" "10")
+ORDER=("Terminal" "Browser" "Chat" "Mail" "Obsidian" "Research" "Music" "1" "4" "5" "6" "7" "8" "9" "10")
 
 # Collect ordered workspaces
 SORTED_WORKSPACES=()
