@@ -30,7 +30,7 @@ if [ -z "$WIDTH" ] || [ "$WIDTH" -eq 0 ]; then
 fi
 
 # Define adaptive geometry boundaries:
-# External Desktop Monitor (top gap 50) vs Built-in Laptop Display (top gap 46)
+# External Desktop Monitor (top gap 50) vs Built-in Laptop Display (top gap 20)
 if [ "$IS_BUILTIN" = "false" ] || [ "$WIDTH" -gt 2000 ]; then
     NEW_INNER=10
     NEW_OUTER=10
@@ -44,7 +44,7 @@ else
     SK_MARGIN=10
     SK_Y_OFFSET=8
     BAR_HEIGHT=32
-    TARGET_TOP=46
+    TARGET_TOP=20
 fi
 
 CONFIG_FILE="$HOME/.aerospace.toml"

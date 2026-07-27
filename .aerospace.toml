@@ -73,8 +73,8 @@ alt-ctrl-cmd-shift-up = 'move up'
 alt-ctrl-cmd-shift-right = 'move right'
 
 # Resize
-alt-ctrl-cmd-minus = 'resize smart -20'
-alt-ctrl-cmd-equal = 'resize smart +20'
+alt-ctrl-cmd-minus = 'resize smart -40'
+alt-ctrl-cmd-equal = 'resize smart +40'
 
 # Named Workspaces (Letters)
 alt-ctrl-cmd-t = ['workspace Terminal', 'exec-and-forget open -a Ghostty']
@@ -113,6 +113,9 @@ alt-ctrl-cmd-d = 'exec-and-forget open -a Dictionary'
 
 # Sound Settings
 alt-ctrl-cmd-s = 'exec-and-forget open x-apple.systempreferences:com.apple.Sound-Settings.extension'
+
+# Gemini
+alt-ctrl-cmd-g = 'exec-and-forget open -a Gemini'
 
 # Reload AeroSpace + SketchyBar Config
 alt-ctrl-cmd-period = 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/reload.sh'
