@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Export Homebrew binary path for environment compatibility
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # Query the focused display's physical properties using Apple CoreGraphics API via JXA
 DISPLAY_INFO=$(osascript -l JavaScript <<EOF 2>/dev/null
 ObjC.import("Cocoa");
@@ -69,4 +72,5 @@ if [ "$CURRENT_TOP" != "$TARGET_TOP" ] || [ "$CURRENT_INNER" != "$NEW_INNER" ]; 
       -e "s/\(outer.bottom[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
       -e "s/\(outer.top[[:space:]]*=[[:space:]]*\)[0-9]*/\1$TARGET_TOP/" \
       "$CONFIG_FILE"
+    aerospace reload-config 2>/dev/null || true
 fi
