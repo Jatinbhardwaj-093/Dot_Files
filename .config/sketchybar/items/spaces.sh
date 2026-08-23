@@ -16,16 +16,13 @@ if [ -z "$ALL_WORKSPACES" ]; then
   ALL_WORKSPACES="Terminal
 Browser
 Chat
-Mail
 Obsidian
 Research
-Music
-1"
+Free"
 fi
 
 # Preferred ordering
-ORDER=("Terminal" "Browser" "Chat" "Mail" "Obsidian" "Research" "Music" "1" "4" "5" "6" "7" "8" "9" "10")
-
+ORDER=("Terminal" "Browser" "Chat" "Obsidian" "Research" "Free" "4" "5" "6" "7" "8" "9" "10")
 # Collect ordered workspaces
 SORTED_WORKSPACES=()
 for w in "${ORDER[@]}"; do
