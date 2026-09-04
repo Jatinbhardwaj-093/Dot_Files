@@ -118,6 +118,9 @@ alias tmuxn="tmux new -s"
 # Open files with fzf and nvim
 alias fnvim='nvim $(fzf)'
 
+# Reload aerospace
+alias aeroreload="source .config/aerospace/reload.sh"
+
 # cd into a directory interactively
 alias fcd='cd $(find . -type d | fzf)'
 
