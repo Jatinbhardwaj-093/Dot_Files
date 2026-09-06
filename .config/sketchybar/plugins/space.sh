@@ -38,7 +38,7 @@ else
 fi
 
 if [ "$SPACE_NAME" = "$FOCUSED" ]; then
-  # Current active workspace
+  # HERO: active workspace must pop — solid Gruvbox yellow, black text
   if [ "$SENDER" = "mouse.entered" ]; then
     sketchybar --set "$NAME" \
       background.color="$ORANGE" \
@@ -54,7 +54,7 @@ if [ "$SPACE_NAME" = "$FOCUSED" ]; then
   fi
 
 elif [ "$WINDOW_COUNT" -gt 0 ]; then
-  # Workspace has windows/apps
+  # Occupied but inactive: warm dark pill, yellow edge so it reads "alive"
   if [ "$SENDER" = "mouse.entered" ]; then
     sketchybar --set "$NAME" \
       background.color="$BG2" \
@@ -72,7 +72,7 @@ elif [ "$WINDOW_COUNT" -gt 0 ]; then
   fi
 
 else
-  # Empty workspace
+  # Empty: ghost pill, no border noise
   if [ "$SENDER" = "mouse.entered" ]; then
     sketchybar --set "$NAME" \
       background.color="$BG1" \
