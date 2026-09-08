@@ -160,6 +160,14 @@ bindkey -r "^G"
 # accept zsh-autosuggestions with ctrl+l
 bindkey '^L' autosuggest-accept
 
+# Fix Ghostty/Tmux extended escape sequences (modifyOtherKeys & CSI u) leaking into terminal
+bindkey '\e[27;5;106~' accept-line   # Ctrl+J / Enter (modifyOtherKeys)
+bindkey '\e[27;2;13~'  accept-line   # Shift+Enter (modifyOtherKeys)
+bindkey '\e[27;5;13~'  accept-line   # Ctrl+Enter (modifyOtherKeys)
+bindkey '\e[13;2u'     accept-line   # Shift+Enter (CSI u)
+bindkey '\e[13;5u'     accept-line   # Ctrl+Enter (CSI u)
+bindkey '\e[106;5u'    accept-line   # Ctrl+J (CSI u)
+
 
 # bun completions
 [ -s "/Users/personal/.bun/_bun" ] && source "/Users/personal/.bun/_bun"
