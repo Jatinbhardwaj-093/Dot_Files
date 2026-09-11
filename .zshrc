@@ -92,6 +92,9 @@ alias fman="compgen -c | fzf | xargs man"
 # zoxide (called from ~/scripts/)
 alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
 
+# Antigravity conversation picker & session manager
+alias agyc="python3 $HOME/scripts/agyc"
+
 # Next level of an ls 
 # options :  --no-filesize --no-time --no-permissions 
 alias ls="eza --no-filesize --long --color=always --icons=always --no-user" 

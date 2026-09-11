@@ -107,6 +107,13 @@ if [ -d "$HOME/.config/yazi" ]; then
     log "Synced .config/yazi TOML files"
 fi
 
+# 12. Local User Scripts (including agyc)
+if [ -d "$HOME/scripts" ]; then
+    mkdir -p "$REPO_DIR/scripts"
+    rsync -av --exclude '.DS_Store' --exclude '__pycache__' "$HOME/scripts/" "$REPO_DIR/scripts/"
+    log "Synced scripts"
+fi
+
 # Git Commit and Push if changes exist
 if [ -n "$(git status --porcelain)" ]; then
     log "Changes detected in dotfiles. Committing and pushing..."

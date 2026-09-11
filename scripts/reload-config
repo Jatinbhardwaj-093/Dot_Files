@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec /Users/jatinbhardwaj/.config/aerospace/reload.sh "$@"

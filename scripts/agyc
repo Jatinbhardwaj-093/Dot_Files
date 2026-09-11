@@ -1,0 +1,467 @@
+#!/usr/bin/env python3
+"""
+agyc - Antigravity Conversation Manager & Fuzzy Picker
+Allows searching, previewing, and resuming past Antigravity CLI sessions without manual UUIDs.
+Features:
+  - Project/Repository detection column
+  - Clean, concise topic extraction (strips filler, raw ANSI codes, image paths)
+  - Clear user message counts instead of raw step dumps
+  - Live transcript preview in fzf (3:2 ratio with folded tool calls)
+  - Current-directory awareness (mark or filter by active repo)
+  - Session naming via 'Naming: <Title>' in chat or 'agyc name <Title>'
+"""
+
+import os
+import sys
+import json
+import time
+from datetime import datetime
+import subprocess
+import shutil
+import re
+
+BRAIN_DIR = os.path.expanduser("~/.gemini/antigravity-cli/brain")
+
+def get_current_project_name():
+    """Detect current project name from git root or cwd."""
+    cwd = os.getcwd()
+    try:
+        res = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, cwd=cwd
+        )
+        if res.returncode == 0 and res.stdout.strip():
+            return os.path.basename(res.stdout.strip())
+    except Exception:
+        pass
+    base = os.path.basename(cwd)
+    return base if base and cwd != os.path.expanduser("~") else ""
+
+def format_relative_time(ts):
+    now = time.time()
+    diff = max(0, int(now - ts))
+    if diff < 60:
+        return f"{diff}s ago"
+    elif diff < 3600:
+        return f"{diff // 60}m ago"
+    elif diff < 86400:
+        return f"{diff // 3600}h ago"
+    elif diff < 604800:
+        return f"{diff // 86400}d ago"
+    else:
+        return datetime.fromtimestamp(ts).strftime("%b %d")
+
+def clean_ansi_and_artifacts(text):
+    if not text:
+        return ""
+    # Strip ANSI escape codes
+    text = re.sub(r'\x1b\[[0-9;]*[a-zA-Z~]', '', text)
+    text = re.sub(r'\[\d+(?:;\d+)*[~a-zA-Z]', '', text)
+    # Strip metadata XML tags
+    text = re.sub(r'<ADDITIONAL_METADATA>.*?</ADDITIONAL_METADATA>', '', text, flags=re.DOTALL)
+    text = re.sub(r'<USER_SETTINGS_CHANGE>.*?</USER_SETTINGS_CHANGE>', '', text, flags=re.DOTALL)
+    if '<USER_REQUEST>' in text and '</USER_REQUEST>' in text:
+        text = text.split('<USER_REQUEST>')[1].split('</USER_REQUEST>')[0]
+    # Strip screenshot or file paths pasted at start
+    text = re.sub(r'@?/(?:var|Users|private|tmp)[^\s]+\.(?:png|jpg|jpeg|gif|webp|svg|pdf|txt)\s*', '', text, flags=re.IGNORECASE)
+    return text.strip()
+
+def summarize_topic(raw_text):
+    """Transform raw user prompt into a concise, readable topic."""
+    text = clean_ansi_and_artifacts(raw_text)
+    if not text:
+        return "(empty session)"
+
+    # Remove conversational filler from start
+    filler_patterns = [
+        r'^(?:hey|hi|hello)?\s*(?:there)?\s*[,:\.\-]?\s*',
+        r'^(?:can you (?:please )?|could you (?:please )?|please )\s*',
+        r'^(?:i need (?:you )?to |i want (?:you )?to |i (?:would )?like to |i would like you to )\s*',
+        r'^(?:i think (?:we should )?|so |just |actually )\s*',
+        r'^(?:for this project |in this project |for now )\s*'
+    ]
+    for pat in filler_patterns:
+        text = re.sub(pat, '', text, flags=re.IGNORECASE).strip()
+
+    # Collapse internal whitespace & newlines
+    text = ' '.join(text.split()).strip()
+
+    # Capitalize first letter
+    if text:
+        text = text[0].upper() + text[1:]
+
+    # Truncate nicely
+    if len(text) > 75:
+        text = text[:72].rstrip() + "..."
+    return text if text else "(general task)"
+
+def detect_project_from_transcript(lines):
+    """Examine file paths and tool cwd inside the transcript to detect project name."""
+    home = os.path.expanduser("~")
+    for line in lines:
+        # Check Cwd argument in tool calls
+        if '"Cwd"' in line or "'Cwd'" in line:
+            m = re.search(r'["\']Cwd["\']\s*:\s*["\']([^"\']+)["\']', line)
+            if m:
+                cwd_val = m.group(1).rstrip("/")
+                if cwd_val.startswith(os.path.join(home, "Github")):
+                    rel = os.path.relpath(cwd_val, os.path.join(home, "Github"))
+                    return rel.split("/")[0]
+                elif cwd_val.startswith(os.path.join(home, "Documents")):
+                    rel = os.path.relpath(cwd_val, os.path.join(home, "Documents"))
+                    return rel.split("/")[0]
+                elif cwd_val != home:
+                    return os.path.basename(cwd_val)
+
+        # Check target file paths or search paths
+        m = re.search(rf'{home}/Github/([^/\s"\']+)', line)
+        if m:
+            return m.group(1)
+        m = re.search(rf'{home}/Documents/([^/\s"\']+)', line)
+        if m:
+            return m.group(1)
+
+    return "~"
+
+def extract_custom_name(raw_prompts):
+    """Scan prompts in reverse for explicit session naming syntax like 'Naming: <name>'."""
+    for p in reversed(raw_prompts):
+        # Match 'Naming: <name>' or 'Name: <name>' at line start or anywhere
+        m = re.search(r'(?:^|\n)\s*(?:naming|name)\s*:\s*([^\n\r]+)', p, flags=re.IGNORECASE)
+        if m:
+            val = m.group(1).strip().strip('"\'`')
+            # Clean trailing punctuation
+            val = re.sub(r'[\.\:\;]+$', '', val).strip()
+            if val:
+                return val[:60]
+        # Also check inline 'Naming: <name>'
+        m2 = re.search(r'\b(?:naming|name)\s*:\s*([A-Za-z0-9_\-\s]+)', p, flags=re.IGNORECASE)
+        if m2:
+            val = m2.group(1).strip().strip('"\'`')
+            if len(val) >= 3 and not val.lower().startswith("the "):
+                return val[:60]
+    return ""
+
+def get_conversations():
+    if not os.path.isdir(BRAIN_DIR):
+        return []
+
+    sessions = []
+    try:
+        entries = os.listdir(BRAIN_DIR)
+    except Exception:
+        return []
+
+    for cid in entries:
+        conv_path = os.path.join(BRAIN_DIR, cid)
+        if not os.path.isdir(conv_path):
+            continue
+        transcript_file = os.path.join(conv_path, ".system_generated", "logs", "transcript.jsonl")
+        if not os.path.isfile(transcript_file):
+            continue
+
+        try:
+            mtime = os.path.getmtime(transcript_file)
+            user_prompts = []
+            raw_prompts = []
+            sample_lines = []
+            total_steps = 0
+
+            with open(transcript_file, "r", encoding="utf-8", errors="ignore") as f:
+                for idx, line in enumerate(f):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    total_steps += 1
+                    if idx < 40:
+                        sample_lines.append(line)
+                    try:
+                        obj = json.loads(line)
+                        if obj.get("type") == "USER_INPUT" or obj.get("source") == "USER_EXPLICIT":
+                            raw = obj.get("content", "")
+                            raw_prompts.append(raw)
+                            cleaned = clean_ansi_and_artifacts(raw)
+                            if cleaned and cleaned.lower() not in ("caveman", "hello", "hi"):
+                                user_prompts.append(cleaned)
+                            elif cleaned:
+                                user_prompts.append(cleaned)
+                    except Exception:
+                        pass
+
+            # Check for custom name via .name file or 'Naming: <name>' syntax
+            custom_name = ""
+            name_file = os.path.join(conv_path, ".name")
+            if os.path.isfile(name_file):
+                try:
+                    with open(name_file, "r", encoding="utf-8") as nf:
+                        custom_name = nf.read().strip()
+                except Exception:
+                    pass
+
+            if not custom_name:
+                custom_name = extract_custom_name(raw_prompts)
+
+            if custom_name:
+                topic = f"🏷  {custom_name}"
+            else:
+                # Choose best representative prompt
+                best_prompt = ""
+                for p in user_prompts:
+                    if p.lower() not in ("caveman", "hi", "hello") and len(p) > 3:
+                        best_prompt = p
+                        break
+                if not best_prompt and user_prompts:
+                    best_prompt = user_prompts[0]
+                topic = summarize_topic(best_prompt)
+
+            project = detect_project_from_transcript(sample_lines)
+            user_msg_count = len(user_prompts)
+
+            sessions.append({
+                "id": cid,
+                "mtime": mtime,
+                "relative": format_relative_time(mtime),
+                "user_msgs": user_msg_count,
+                "steps": total_steps,
+                "project": project,
+                "topic": topic,
+                "custom_name": custom_name,
+                "transcript_file": transcript_file
+            })
+        except Exception:
+            continue
+
+    sessions.sort(key=lambda s: s["mtime"], reverse=True)
+    return sessions
+
+def print_preview(cid):
+    transcript_file = os.path.join(BRAIN_DIR, cid, ".system_generated", "logs", "transcript.jsonl")
+    if not os.path.isfile(transcript_file):
+        print(f"\033[31mNo transcript found for session {cid}\033[0m")
+        return
+
+    mtime = os.path.getmtime(transcript_file)
+    date_str = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d %H:%M:%S")
+
+    # Parse turns (User input, folded tools, Agent replies)
+    turns = []
+    current_turn = None
+    sample_lines = []
+    steps = 0
+
+    with open(transcript_file, "r", encoding="utf-8", errors="ignore") as f:
+        for idx, line in enumerate(f):
+            line = line.strip()
+            if not line:
+                continue
+            steps += 1
+            if idx < 40:
+                sample_lines.append(line)
+
+            try:
+                data = json.loads(line)
+            except Exception:
+                continue
+
+            step_type = data.get("type")
+            source = data.get("source")
+            content = data.get("content", "")
+            tool_calls = data.get("tool_calls", [])
+
+            if step_type == "USER_INPUT" or source == "USER_EXPLICIT":
+                cleaned_user = clean_ansi_and_artifacts(content)
+                if cleaned_user:
+                    if current_turn:
+                        turns.append(current_turn)
+                    current_turn = {
+                        "user": cleaned_user,
+                        "tools": [],
+                        "agent": ""
+                    }
+            elif current_turn:
+                if tool_calls:
+                    for tc in tool_calls:
+                        name = tc.get("name")
+                        if name:
+                            current_turn["tools"].append(name)
+                elif step_type == "PLANNER_RESPONSE" and content:
+                    clean_res = " ".join(clean_ansi_and_artifacts(content).split())
+                    if clean_res and not current_turn["agent"]:
+                        current_turn["agent"] = clean_res
+
+    if current_turn:
+        turns.append(current_turn)
+
+    project = detect_project_from_transcript(sample_lines)
+
+    # Check if custom name exists for this preview
+    custom_name = extract_custom_name([t["user"] for t in turns])
+    name_file = os.path.join(BRAIN_DIR, cid, ".name")
+    if os.path.isfile(name_file):
+        try:
+            with open(name_file, "r", encoding="utf-8") as nf:
+                custom_name = nf.read().strip()
+        except Exception:
+            pass
+
+    print(f"\033[1;36m────────────────────────────────────────────────\033[0m")
+    if custom_name:
+        print(f"\033[1;32mSession    : \033[1;37m🏷  {custom_name}\033[0m")
+    print(f"\033[1;33mProject    : \033[1;37m{project}\033[0m")
+    print(f"\033[1;33mLast Active: \033[0m{date_str} ({format_relative_time(mtime)})")
+    print(f"\033[1;33mStats      : \033[0m{len(turns)} user requests • {steps:,} steps")
+    print(f"\033[1;33mSession ID : \033[90m{cid[:8]}...{cid[-4:]}\033[0m")
+    print(f"\033[1;36m────────────────────────────────────────────────\033[0m\n")
+
+    print("\033[1;32m--- Dialogue History (Tools Folded) ---\033[0m\n")
+    for i, t in enumerate(turns[:7], 1):
+        user_p = t["user"]
+        if len(user_p) > 280:
+            user_p = user_p[:277] + "..."
+        print(f"\033[1;34m[Request {i}]\033[0m {user_p}")
+
+        # Folded tools line
+        if t["tools"]:
+            tool_counts = {}
+            for name in t["tools"]:
+                tool_counts[name] = tool_counts.get(name, 0) + 1
+            tool_summary = ", ".join(f"{k} (x{v})" if v > 1 else k for k, v in tool_counts.items())
+            print(f"  \033[90m▸ Folded Tools ({len(t['tools'])}): {tool_summary}\033[0m")
+
+        # Agent concise response
+        if t["agent"]:
+            agent_res = t["agent"]
+            if len(agent_res) > 180:
+                agent_res = agent_res[:177] + "..."
+            print(f"  \033[35m↳ Agent:\033[0m \033[37m{agent_res}\033[0m")
+
+        print()
+
+    if len(turns) > 7:
+        print(f"\033[90m... and {len(turns) - 7} more user requests\033[0m\n")
+
+def run_fzf(query="", current_only=False):
+    sessions = get_conversations()
+    if not sessions:
+        print("No Antigravity conversations found in ~/.gemini/antigravity-cli/brain")
+        return
+
+    current_project = get_current_project_name()
+
+    if current_only and current_project:
+        sessions = [s for s in sessions if s["project"] == current_project]
+        if not sessions:
+            print(f"No previous sessions found for project: {current_project}")
+            return
+
+    fzf_binary = shutil.which("fzf") or "/opt/homebrew/bin/fzf"
+    if not os.path.exists(fzf_binary):
+        print("fzf is not installed. Listing recent sessions:")
+        for idx, s in enumerate(sessions[:15], 1):
+            print(f"[{idx:2d}] {s['relative']:>8} │ {s['project']:<14} │ {s['user_msgs']:2d} msgs │ {s['topic']}")
+        return
+
+    lines = []
+    for s in sessions:
+        disp_rel = f"{s['relative']:<8}"
+        # Highlight if matching current directory
+        if current_project and s["project"] == current_project:
+            proj_display = f"\033[1;32m★ {s['project']:<13}\033[0m"
+        else:
+            proj_display = f"\033[36m  {s['project']:<13}\033[0m"
+
+        msg_count = f"{s['user_msgs']:>2} msgs"
+        disp_topic = s['topic']
+        line = f"{disp_rel} │ {proj_display} │ {msg_count} │ {disp_topic}\t{s['id']}"
+        lines.append(line)
+
+    fzf_input = "\n".join(lines)
+    script_path = os.path.abspath(__file__)
+    preview_cmd = f'python3 "{script_path}" --preview {{2}}'
+
+    title = f"Antigravity Sessions"
+    if current_project:
+        title += f" [Current Project: {current_project}]"
+
+    cmd = [
+        fzf_binary,
+        "--delimiter=\t",
+        "--with-nth=1",
+        "--preview", preview_cmd,
+        "--preview-window=right:40%:wrap",
+        f"--prompt=Resume Session ❯ ",
+        f"--header={title}\nEnter: Resume | Esc: Quit | Type keywords (e.g. project name or task)",
+        "--height=85%",
+        "--reverse",
+        "--ansi"
+    ]
+    if query:
+        cmd.extend(["--query", query])
+
+    try:
+        proc = subprocess.run(cmd, input=fzf_input, text=True, stdout=subprocess.PIPE)
+        if proc.returncode != 0 or not proc.stdout.strip():
+            return
+        selected_line = proc.stdout.strip()
+        parts = selected_line.split("\t")
+        if len(parts) >= 2:
+            target_id = parts[1].strip()
+            print(f"\033[1;32mResuming conversation {target_id}...\033[0m")
+            os.execvp("agy", ["agy", "--conversation", target_id])
+    except KeyboardInterrupt:
+        pass
+
+def main():
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        if arg == "--preview" and len(sys.argv) > 2:
+            print_preview(sys.argv[2])
+            return
+        elif arg in ("-c", "--continue", "last"):
+            print("\033[1;32mContinuing most recent conversation...\033[0m")
+            os.execvp("agy", ["agy", "-c"])
+        elif arg in (".", "current", "--current"):
+            run_fzf(current_only=True)
+            return
+        elif arg in ("name", "tag") and len(sys.argv) > 2:
+            name_text = " ".join(sys.argv[2:]).strip().strip('"\'`')
+            sessions = get_conversations()
+            if not sessions:
+                print("No sessions found.")
+                return
+            target_cid = sessions[0]["id"]
+            name_path = os.path.join(BRAIN_DIR, target_cid, ".name")
+            try:
+                with open(name_path, "w", encoding="utf-8") as nf:
+                    nf.write(name_text)
+                print(f"\033[1;32m✓ Named latest session ({target_cid[:8]}...) as:\033[0m 🏷  {name_text}")
+            except Exception as e:
+                print(f"Failed to name session: {e}")
+            return
+        elif arg in ("-l", "--list", "ls"):
+            sessions = get_conversations()
+            print(f"\033[1;36mRecent Antigravity Conversations ({len(sessions)} total):\033[0m")
+            for idx, s in enumerate(sessions[:15], 1):
+                print(f" \033[1;33m{idx:2d})\033[0m \033[32m{s['relative']:<8}\033[0m │ \033[36m{s['project']:<14}\033[0m │ {s['user_msgs']:>2} msgs │ {s['topic']}")
+            return
+        elif arg in ("-h", "--help"):
+            print("agyc - Antigravity Conversation Picker & Manager")
+            print("\nUsage:")
+            print("  agyc                  Launch interactive fuzzy picker with project column & preview")
+            print("  agyc .                Show only sessions from current project / directory")
+            print("  agyc <keyword>        Pre-filter sessions by keyword (e.g. 'pgmpy', 'agyc')")
+            print("  agyc name <title>     Set a custom name for the most recent session")
+            print("  agyc -c / last        Continue most recent conversation directly")
+            print("  agyc ls               List 15 most recent sessions with projects and topics")
+            print("\nIn-chat Naming:")
+            print("  Include 'Naming: <Title>' anywhere in your chat prompt, and agyc will automatically")
+            print("  name that session accordingly!")
+            return
+        else:
+            run_fzf(query=" ".join(sys.argv[1:]))
+            return
+
+    run_fzf()
+
+if __name__ == "__main__":
+    main()
