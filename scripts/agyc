@@ -6,9 +6,8 @@ Features:
   - Project/Repository detection column
   - Clean, concise topic extraction (strips filler, raw ANSI codes, image paths)
   - Clear user message counts instead of raw step dumps
-  - Live transcript preview in fzf (3:2 ratio with folded tool calls)
+  - Live transcript preview in fzf
   - Current-directory awareness (mark or filter by active repo)
-  - Session naming via 'Naming: <Title>' in chat or 'agyc name <Title>'
 """
 
 import os
