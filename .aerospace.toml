@@ -51,6 +51,9 @@ outer.right = 10
 
 # Layouts
 alt-ctrl-cmd-slash = 'layout tiles horizontal vertical'
+alt-ctrl-cmd-shift-slash = 'layout tiles horizontal vertical'
+alt-ctrl-cmd-v = 'layout tiles horizontal vertical'
+alt-ctrl-cmd-shift-v = 'layout tiles horizontal vertical'
 alt-ctrl-cmd-comma = 'layout accordion horizontal vertical'
 cmd-e = 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/toggle-space-layout.sh'
 
@@ -77,11 +80,11 @@ alt-ctrl-cmd-minus = 'resize smart -40'
 alt-ctrl-cmd-equal = 'resize smart +40'
 
 # Named Workspaces (Letters)
-alt-ctrl-cmd-t = ['workspace Terminal', 'exec-and-forget open -a Ghostty']
-alt-ctrl-cmd-b = ['workspace Browser', 'exec-and-forget open -a Safari']
-alt-ctrl-cmd-c = ['workspace Chat', 'exec-and-forget open -a Legcord']
-alt-ctrl-cmd-n = ['workspace Obsidian', 'exec-and-forget open -a Obsidian']
-alt-ctrl-cmd-r = ['workspace Research', 'exec-and-forget open -a Zotero']
+alt-ctrl-cmd-t = ['workspace Terminal', 'exec-and-forget /bin/bash -c "pgrep -iq Ghostty || open -a Ghostty"']
+alt-ctrl-cmd-b = ['workspace Browser', 'exec-and-forget /bin/bash -c "pgrep -iq Safari || open -a Safari"']
+alt-ctrl-cmd-c = ['workspace Chat', 'exec-and-forget /bin/bash -c "pgrep -iq Legcord || open -a Legcord"']
+alt-ctrl-cmd-n = ['workspace Obsidian', 'exec-and-forget /bin/bash -c "pgrep -iq Obsidian || open -a Obsidian"']
+alt-ctrl-cmd-r = ['workspace Research', 'exec-and-forget /bin/bash -c "pgrep -iq Zotero || open -a Zotero"']
 
 # Numbered Workspaces
 alt-ctrl-cmd-f = 'workspace Free'

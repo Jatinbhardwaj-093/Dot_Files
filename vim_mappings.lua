@@ -40,3 +40,28 @@ end, { desc = "Comment toggle line" })
 -- Add blank line below / above without leaving Normal mode
 map("n", "<leader>o", "o<Esc>", { desc = "Insert newline below" })
 map("n", "<leader>O", "O<Esc>", { desc = "Insert newline above" })
+
+-- Copy file paths to clipboard
+map("n", "<leader>cf", function()
+  local filename = vim.fn.expand("%:t")
+  vim.fn.setreg("+", filename)
+  vim.notify("Copied filename: " .. filename)
+end, { desc = "Copy filename (with extension)" })
+
+map("n", "<leader>cn", function()
+  local filename = vim.fn.expand("%:t:r")
+  vim.fn.setreg("+", filename)
+  vim.notify("Copied filename without extension: " .. filename)
+end, { desc = "Copy filename (no extension)" })
+
+map("n", "<leader>cd", function()
+  local dirpath = vim.fn.expand("%:p:h")
+  vim.fn.setreg("+", dirpath)
+  vim.notify("Copied directory path: " .. dirpath)
+end, { desc = "Copy directory path" })
+
+map("n", "<leader>cc", function()
+  local fullpath = vim.fn.expand("%:p")
+  vim.fn.setreg("+", fullpath)
+  vim.notify("Copied full path: " .. fullpath)
+end, { desc = "Copy full path" })
