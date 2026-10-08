@@ -7,7 +7,7 @@ config-version = 2
 
 start-at-login = true
 
-after-startup-command = ['exec-and-forget /Users/jatinbhardwaj/.config/aerospace/update-gaps.sh']
+after-startup-command = []
 
 enable-normalization-flatten-containers = false
 enable-normalization-opposite-orientation-for-nested-containers = true
@@ -17,7 +17,7 @@ accordion-padding = 30
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'horizontal'
 
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center', 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/update-gaps.sh']
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 automatically-unhide-macos-hidden-apps = false
 
@@ -39,7 +39,7 @@ inner.horizontal = 10
 inner.vertical = 10
 outer.left = 10
 outer.bottom = 10
-outer.top = 50
+outer.top = [{ monitor."built-in" = 20 }, 50]
 outer.right = 10
 
 # =========================================================

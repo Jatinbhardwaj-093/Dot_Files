@@ -13,6 +13,7 @@ sketchybar --remove '/.*/'
 
 # Add custom events
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event agy_event
 
 ##### Bar Appearance (Gruvchad floating capsule) #####
 sketchybar --bar \
@@ -134,6 +135,9 @@ sketchybar --add item space_layout right \
                  script="$PLUGIN_DIR/space_layout.sh" \
                  click_script="/Users/jatinbhardwaj/.config/aerospace/toggle-space-layout.sh" \
            --subscribe space_layout aerospace_workspace_change front_app_switched mouse.entered mouse.exited
+
+# 6. Antigravity Agent Notification Pill (Placed immediately after space_layout)
+source "$HOME/.config/sketchybar/items/agy.sh"
 
 ##### Force all scripts to run the first time #####
 sketchybar --update

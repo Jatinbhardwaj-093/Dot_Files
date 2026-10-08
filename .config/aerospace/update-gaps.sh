@@ -62,15 +62,5 @@ sketchybar --bar \
   y_offset="$SK_Y_OFFSET" \
   height="$BAR_HEIGHT" 2>/dev/null
 
-# Update gaps if necessary
-if [ "$CURRENT_TOP" != "$TARGET_TOP" ] || [ "$CURRENT_INNER" != "$NEW_INNER" ]; then
-    sed -i '' \
-      -e "s/\(inner.horizontal[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_INNER/" \
-      -e "s/\(inner.vertical[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_INNER/" \
-      -e "s/\(outer.left[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
-      -e "s/\(outer.right[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
-      -e "s/\(outer.bottom[[:space:]]*=[[:space:]]*\)[0-9]*/\1$NEW_OUTER/" \
-      -e "s/\(outer.top[[:space:]]*=[[:space:]]*\)[0-9]*/\1$TARGET_TOP/" \
-      "$CONFIG_FILE"
-    aerospace reload-config 2>/dev/null || true
-fi
+# Gaps are now handled natively in ~/.aerospace.toml via per-monitor pattern list.
+# sed config rewrite disabled to prevent overriding native monitor gaps.

@@ -1,0 +1,11 @@
+#!/bin/bash
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+STATUS="${1:-busy}"
+MSG="${2:-}"
+
+if [ -n "$MSG" ]; then
+  sketchybar --trigger agy_event STATUS="$STATUS" MSG="$MSG" 2>/dev/null
+else
+  sketchybar --trigger agy_event STATUS="$STATUS" 2>/dev/null
+fi

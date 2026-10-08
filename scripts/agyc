@@ -123,18 +123,18 @@ def detect_project_from_transcript(lines):
     return "~"
 
 def extract_custom_name(raw_prompts):
-    """Scan prompts in reverse for explicit session naming syntax like 'Naming: <name>'."""
+    """Scan prompts in reverse for explicit session naming syntax like 'Naming agy: <name>'."""
     for p in reversed(raw_prompts):
-        # Match 'Naming: <name>' or 'Name: <name>' at line start or anywhere
-        m = re.search(r'(?:^|\n)\s*(?:naming|name)\s*:\s*([^\n\r]+)', p, flags=re.IGNORECASE)
+        # Match 'Naming agy: <name>' or 'Name agy: <name>' at line start or anywhere
+        m = re.search(r'(?:^|\n)\s*(?:naming\s+agy|name\s+agy)\s*:\s*([^\n\r]+)', p, flags=re.IGNORECASE)
         if m:
             val = m.group(1).strip().strip('"\'`')
             # Clean trailing punctuation
             val = re.sub(r'[\.\:\;]+$', '', val).strip()
             if val:
                 return val[:60]
-        # Also check inline 'Naming: <name>'
-        m2 = re.search(r'\b(?:naming|name)\s*:\s*([A-Za-z0-9_\-\s]+)', p, flags=re.IGNORECASE)
+        # Also check inline 'Naming agy: <name>'
+        m2 = re.search(r'\b(?:naming\s+agy|name\s+agy)\s*:\s*([A-Za-z0-9_\-\s]+)', p, flags=re.IGNORECASE)
         if m2:
             val = m2.group(1).strip().strip('"\'`')
             if len(val) >= 3 and not val.lower().startswith("the "):
@@ -187,7 +187,7 @@ def get_conversations():
                     except Exception:
                         pass
 
-            # Check for custom name via .name file or 'Naming: <name>' syntax
+            # Check for custom name via .name file or 'Naming agy: <name>' syntax
             custom_name = ""
             name_file = os.path.join(conv_path, ".name")
             if os.path.isfile(name_file):
@@ -453,7 +453,7 @@ def main():
             print("  agyc -c / last        Continue most recent conversation directly")
             print("  agyc ls               List 15 most recent sessions with projects and topics")
             print("\nIn-chat Naming:")
-            print("  Include 'Naming: <Title>' anywhere in your chat prompt, and agyc will automatically")
+            print("  Include 'Naming agy: <Title>' anywhere in your chat prompt, and agyc will automatically")
             print("  name that session accordingly!")
             return
         else:
