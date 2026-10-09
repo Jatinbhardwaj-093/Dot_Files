@@ -17,11 +17,23 @@ accordion-padding = 30
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'horizontal'
 
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center', 'exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change']
 
 automatically-unhide-macos-hidden-apps = false
 
 persistent-workspaces = ["Terminal", "Browser", "Chat", "Research", "Free"]
+
+[workspace-to-monitor-force-assignment]
+Terminal   = 'main'
+Browser    = 'main'
+Chat       = 'main'
+Research   = 'main'
+Free       = 'main'
+Terminal-2 = 'built-in'
+Browser-2  = 'built-in'
+Chat-2     = 'built-in'
+Research-2 = 'built-in'
+Free-2     = 'built-in'
 
 on-mode-changed = []
 
@@ -88,17 +100,32 @@ alt-ctrl-cmd-r = ['workspace Research', 'exec-and-forget open -a Zotero']
 # Numbered Workspaces
 alt-ctrl-cmd-f = 'workspace Free'
 
+# Secondary Workspaces on Mac Display (1=Terminal, 2=Browser, 3=Chat, 4=Research, 5=Free)
+alt-ctrl-cmd-1 = ['workspace Terminal-2', 'exec-and-forget open -a Ghostty']
+alt-ctrl-cmd-2 = ['workspace Browser-2', 'exec-and-forget open -a Safari']
+alt-ctrl-cmd-3 = ['workspace Chat-2', 'exec-and-forget open -a Legcord']
+alt-ctrl-cmd-4 = ['workspace Research-2', 'exec-and-forget open -a Zotero']
+alt-ctrl-cmd-5 = 'workspace Free-2'
+
 # Move Window To Workspace (And switch focus to it)
 alt-ctrl-cmd-shift-t = ['move-node-to-workspace Terminal', 'workspace Terminal']
 alt-ctrl-cmd-shift-b = ['move-node-to-workspace Browser', 'workspace Browser']
 alt-ctrl-cmd-shift-c = ['move-node-to-workspace Chat', 'workspace Chat']
 alt-ctrl-cmd-shift-r = ['move-node-to-workspace Research', 'workspace Research']
-
 alt-ctrl-cmd-shift-f = ['move-node-to-workspace Free', 'workspace Free']
+
+alt-ctrl-cmd-shift-1 = ['move-node-to-workspace Terminal-2', 'workspace Terminal-2']
+alt-ctrl-cmd-shift-2 = ['move-node-to-workspace Browser-2', 'workspace Browser-2']
+alt-ctrl-cmd-shift-3 = ['move-node-to-workspace Chat-2', 'workspace Chat-2']
+alt-ctrl-cmd-shift-4 = ['move-node-to-workspace Research-2', 'workspace Research-2']
+alt-ctrl-cmd-shift-5 = ['move-node-to-workspace Free-2', 'workspace Free-2']
 
 # Workspace Navigation
 alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# Monitor Navigation (Hyper + Tab)
+alt-ctrl-cmd-tab = 'focus-monitor --wrap-around next'
 
 
 # Terminal & Browser shortcuts are now integrated directly into the workspace navigation keys.
@@ -211,5 +238,3 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.Notes'
 run = 'layout floating'
-
-

@@ -12,10 +12,31 @@ if [ -z "$FOCUSED" ]; then
 fi
 
 WINDOW_COUNT=$(aerospace list-windows --workspace "$SPACE_NAME" 2>/dev/null | wc -l | tr -d ' ')
+VISIBLE_WORKSPACES=$(aerospace list-workspaces --visible 2>/dev/null)
+IS_VISIBLE="no"
+if echo "$VISIBLE_WORKSPACES" | grep -qx "$SPACE_NAME"; then
+  IS_VISIBLE="yes"
+fi
+
+# Dynamic visibility:
+# Secondary workspaces (Terminal-2, Browser-2, Chat-2) are hidden when not focused, not visible on either screen, and empty
+case "$SPACE_NAME" in
+  Terminal|Browser|Chat|Research|Free)
+    sketchybar --set "$NAME" drawing=on
+    ;;
+  *)
+    if [ "$SPACE_NAME" != "$FOCUSED" ] && [ "$IS_VISIBLE" != "yes" ] && [ "$WINDOW_COUNT" -eq 0 ]; then
+      sketchybar --set "$NAME" drawing=off
+      exit 0
+    else
+      sketchybar --set "$NAME" drawing=on
+    fi
+    ;;
+esac
 
 # Query unique app names in the workspace
 ICONS=""
-if [ "$SPACE_NAME" = "Free" ]; then
+if [ "$SPACE_NAME" = "Free" ] || [ "$SPACE_NAME" = "Free-2" ]; then
   APPS=$(aerospace list-windows --workspace "$SPACE_NAME" --format "%{app-name}" 2>/dev/null | sort -u)
   if [ -n "$APPS" ]; then
     while IFS= read -r app; do
