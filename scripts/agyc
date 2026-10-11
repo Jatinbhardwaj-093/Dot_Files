@@ -123,23 +123,85 @@ def detect_project_from_transcript(lines):
     return "~"
 
 def extract_custom_name(raw_prompts):
-    """Scan prompts in reverse for explicit session naming syntax like 'Naming agy: <name>'."""
+    """Scan prompts in reverse for explicit session naming syntax like 'Naming session: <name>'."""
     for p in reversed(raw_prompts):
-        # Match 'Naming agy: <name>' or 'Name agy: <name>' at line start or anywhere
-        m = re.search(r'(?:^|\n)\s*(?:naming\s+agy|name\s+agy)\s*:\s*([^\n\r]+)', p, flags=re.IGNORECASE)
+        # Match 'Naming session: <name>', 'Name session: <name>', or legacy 'Naming agy: <name>' at line start or anywhere
+        m = re.search(r'(?:^|\n)\s*(?:naming\s+session|name\s+session|naming\s+agy|name\s+agy)\s*:\s*([^\n\r]+)', p, flags=re.IGNORECASE)
         if m:
             val = m.group(1).strip().strip('"\'`')
             # Clean trailing punctuation
             val = re.sub(r'[\.\:\;]+$', '', val).strip()
             if val:
                 return val[:60]
-        # Also check inline 'Naming agy: <name>'
-        m2 = re.search(r'\b(?:naming\s+agy|name\s+agy)\s*:\s*([A-Za-z0-9_\-\s]+)', p, flags=re.IGNORECASE)
+        # Also check inline 'Naming session: <name>'
+        m2 = re.search(r'\b(?:naming\s+session|name\s+session|naming\s+agy|name\s+agy)\s*:\s*([A-Za-z0-9_\-\s]+)', p, flags=re.IGNORECASE)
         if m2:
             val = m2.group(1).strip().strip('"\'`')
             if len(val) >= 3 and not val.lower().startswith("the "):
                 return val[:60]
     return ""
+
+def format_size(num_bytes):
+    if num_bytes < 1024:
+        return f"{num_bytes} B"
+    elif num_bytes < 1024 * 1024:
+        return f"{num_bytes / 1024:.1f} KB"
+    else:
+        return f"{num_bytes / (1024 * 1024):.1f} MB"
+
+def delete_session(cid):
+    """Delete all files and database records for a given conversation ID, returning bytes freed."""
+    freed_bytes = 0
+    cid = cid.strip()
+    if not cid:
+        return 0
+
+    base_cli = os.path.expanduser("~/.gemini/antigravity-cli")
+    
+    # 1. Brain directory (artifacts, transcripts, system logs)
+    brain_path = os.path.join(base_cli, "brain", cid)
+    if os.path.isdir(brain_path):
+        for root, dirs, files in os.walk(brain_path):
+            for f in files:
+                try:
+                    freed_bytes += os.path.getsize(os.path.join(root, f))
+                except Exception:
+                    pass
+        try:
+            shutil.rmtree(brain_path, ignore_errors=True)
+        except Exception:
+            pass
+
+    # 2. Check related directories: conversations, annotations, presence
+    for folder in ("conversations", "annotations", "presence"):
+        dir_path = os.path.join(base_cli, folder)
+        if os.path.isdir(dir_path):
+            try:
+                for fname in os.listdir(dir_path):
+                    if fname.startswith(cid):
+                        fpath = os.path.join(dir_path, fname)
+                        try:
+                            freed_bytes += os.path.getsize(fpath)
+                            os.remove(fpath)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+
+    # 3. Clean up SQLite conversation_summaries.db
+    db_path = os.path.join(base_cli, "conversation_summaries.db")
+    if os.path.isfile(db_path):
+        try:
+            import sqlite3
+            conn = sqlite3.connect(db_path)
+            c = conn.cursor()
+            c.execute("DELETE FROM conversation_summaries WHERE conversation_id = ?", (cid,))
+            conn.commit()
+            conn.close()
+        except Exception:
+            pass
+
+    return freed_bytes
 
 def get_conversations():
     if not os.path.isdir(BRAIN_DIR):
@@ -187,7 +249,7 @@ def get_conversations():
                     except Exception:
                         pass
 
-            # Check for custom name via .name file or 'Naming agy: <name>' syntax
+            # Check for custom name via .name file or 'Naming session: <name>' syntax
             custom_name = ""
             name_file = os.path.join(conv_path, ".name")
             if os.path.isfile(name_file):
@@ -225,6 +287,7 @@ def get_conversations():
                 "project": project,
                 "topic": topic,
                 "custom_name": custom_name,
+                "raw_prompts": raw_prompts,
                 "transcript_file": transcript_file
             })
         except Exception:
@@ -389,7 +452,8 @@ def run_fzf(query="", current_only=False):
         "--preview", preview_cmd,
         "--preview-window=right:40%:wrap",
         f"--prompt=Resume Session ❯ ",
-        f"--header={title}\nEnter: Resume | Esc: Quit | Type keywords (e.g. project name or task)",
+        f"--header={title}\nEnter: Resume │ Ctrl-X: Kill Session │ Esc: Quit",
+        "--expect=ctrl-x,ctrl-d",
         "--height=85%",
         "--reverse",
         "--ansi"
@@ -401,12 +465,28 @@ def run_fzf(query="", current_only=False):
         proc = subprocess.run(cmd, input=fzf_input, text=True, stdout=subprocess.PIPE)
         if proc.returncode != 0 or not proc.stdout.strip():
             return
-        selected_line = proc.stdout.strip()
+        lines = [l for l in proc.stdout.split("\n") if l != ""]
+        if not lines:
+            return
+        if len(lines) == 1:
+            key = ""
+            selected_line = lines[0]
+        else:
+            key = lines[0].strip().lower()
+            selected_line = lines[1]
+
         parts = selected_line.split("\t")
         if len(parts) >= 2:
             target_id = parts[1].strip()
-            print(f"\033[1;32mResuming conversation {target_id}...\033[0m")
-            os.execvp("agy", ["agy", "--conversation", target_id])
+            if key in ("ctrl-x", "ctrl-d"):
+                freed = delete_session(target_id)
+                print(f"\033[1;31m✓ Killed session {target_id[:8]}... (freed {format_size(freed)})\033[0m")
+                # Reload fuzzy picker so deleted session disappears
+                run_fzf(query=query, current_only=current_only)
+                return
+            else:
+                print(f"\033[1;32mResuming conversation {target_id}...\033[0m")
+                os.execvp("agy", ["agy", "--conversation", target_id])
     except KeyboardInterrupt:
         pass
 
@@ -437,6 +517,47 @@ def main():
             except Exception as e:
                 print(f"Failed to name session: {e}")
             return
+        elif arg in ("kill", "rm", "delete"):
+            sessions = get_conversations()
+            if len(sys.argv) > 2:
+                target = sys.argv[2].strip()
+                matched = [s for s in sessions if s["id"].startswith(target) or target.lower() in s["topic"].lower()]
+                if matched:
+                    target_cid = matched[0]["id"]
+                    topic = matched[0]["topic"]
+                else:
+                    target_cid = target
+                    topic = target[:8]
+            else:
+                if not sessions:
+                    print("No sessions found to kill.")
+                    return
+                target_cid = sessions[0]["id"]
+                topic = sessions[0]["topic"]
+
+            freed = delete_session(target_cid)
+            print(f"\033[1;31m✓ Killed session {target_cid[:8]}... ({topic})\033[0m — freed \033[1;32m{format_size(freed)}\033[0m")
+            return
+        elif arg in ("prune", "clean"):
+            sessions = get_conversations()
+            pruned_count = 0
+            total_freed = 0
+            for s in sessions:
+                raws = s.get("raw_prompts", [])
+                should_kill = False
+                for p in raws:
+                    if re.search(r'^\s*kill\s+session[\.\!\s]*$', p, flags=re.IGNORECASE):
+                        should_kill = True
+                        break
+                if should_kill:
+                    f = delete_session(s["id"])
+                    pruned_count += 1
+                    total_freed += f
+            if pruned_count > 0:
+                print(f"\033[1;31m✓ Pruned {pruned_count} session(s)\033[0m — freed \033[1;32m{format_size(total_freed)}\033[0m")
+            else:
+                print("No sessions marked for pruning.")
+            return
         elif arg in ("-l", "--list", "ls"):
             sessions = get_conversations()
             print(f"\033[1;36mRecent Antigravity Conversations ({len(sessions)} total):\033[0m")
@@ -450,11 +571,15 @@ def main():
             print("  agyc .                Show only sessions from current project / directory")
             print("  agyc <keyword>        Pre-filter sessions by keyword (e.g. 'pgmpy', 'agyc')")
             print("  agyc name <title>     Set a custom name for the most recent session")
+            print("  agyc kill [id]        Delete/kill all memory for a session (default: latest)")
+            print("  agyc prune            Purge all sessions marked with 'Kill session'")
             print("  agyc -c / last        Continue most recent conversation directly")
             print("  agyc ls               List 15 most recent sessions with projects and topics")
-            print("\nIn-chat Naming:")
-            print("  Include 'Naming agy: <Title>' anywhere in your chat prompt, and agyc will automatically")
-            print("  name that session accordingly!")
+            print("\nIn-chat Commands:")
+            print("  Naming session: <Title>  Include in prompt to automatically tag & name the session")
+            print("  Kill session             Include in prompt to delete all session storage/memory")
+            print("\nInteractive Keys:")
+            print("  Enter: Resume │ Ctrl-X: Kill session & free memory │ Esc: Quit")
             return
         else:
             run_fzf(query=" ".join(sys.argv[1:]))

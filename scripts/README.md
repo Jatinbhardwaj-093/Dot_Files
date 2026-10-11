@@ -14,16 +14,21 @@ An interactive terminal tool to search, preview, and resume past Google Antigrav
    - Running `agyc` inside any project repo automatically highlights that project's sessions (`★`).
    - Running `agyc .` filters the list strictly to sessions belonging to the current directory.
 3. **Session Naming**:
-   - **In-Chat**: Simply include `Naming: <Your Title>` anywhere in your prompt. `agyc` will recognize it and display it with a `🏷 ` tag.
+   - **In-Chat**: Simply include `Naming session: <Your Title>` anywhere in your prompt. `agyc` will recognize it and display it with a `🏷 ` tag.
    - **From Terminal**: Run `agyc name "Your Title"` to name the most recent session.
-4. **Dialogue Preview (3:2 Ratio)**:
+4. **Session Killing & Memory Cleanup**:
+   - **In-Chat**: Type `Kill session` in chat to immediately purge all session memory (artifacts, SQLite database, transcripts) and eliminate wasted memory.
+   - **From Terminal**: Run `agyc kill` (or alias `kill-session` / `agyk`) to kill the most recent session, or `agyc kill <id>` for a specific session.
+   - **Interactive in `agyc`**: Press `Ctrl-X` on any session in the fuzzy picker to permanently wipe it and free disk space.
+   - **Pruning**: Run `agyc prune` to clean all past sessions where `Kill session` was requested.
+5. **Dialogue Preview (3:2 Ratio)**:
    - 60% conversation list / 40% preview pane on the right.
    - Tool calls are folded into a single line (`▸ Folded Tools (3): view_file (x2), replace_file_content`) to prevent visual clutter and keep focus on the actual dialogue.
-5. **Human Message Count**: Displays actual user requests (`4 msgs`) rather than internal LLM reasoning/tool step counts.
+6. **Human Message Count**: Displays actual user requests (`4 msgs`) rather than internal LLM reasoning/tool step counts.
 
 ### Usage
 ```zsh
-# Launch interactive fuzzy finder
+# Launch interactive fuzzy finder (Ctrl-X kills selected session)
 agyc
 
 # Filter to current directory/project only
@@ -35,6 +40,17 @@ agyc docker
 
 # Name the most recent session
 agyc name "Refactor Auth Middleware"
+
+# Kill most recent session and reclaim disk space
+agyc kill
+# or alias
+kill-session
+
+# Kill a specific session by ID or topic
+agyc kill <id>
+
+# Prune all sessions marked with 'Kill session'
+agyc prune
 
 # Continue the single most recent session
 agyc -c

@@ -94,6 +94,8 @@ alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
 
 # Antigravity conversation picker & session manager
 alias agyc="python3 $HOME/scripts/agyc"
+alias agyk="python3 $HOME/scripts/agyc kill"
+alias kill-session="python3 $HOME/scripts/agyc kill"
 
 # Next level of an ls 
 # options :  --no-filesize --no-time --no-permissions 
