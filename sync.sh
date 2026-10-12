@@ -104,7 +104,11 @@ if [ -d "$HOME/.config/yazi" ]; then
     cp "$HOME/.config/yazi/yazi.toml" "$REPO_DIR/.config/yazi/yazi.toml" 2>/dev/null || true
     cp "$HOME/.config/yazi/theme.toml" "$REPO_DIR/.config/yazi/theme.toml" 2>/dev/null || true
     cp "$HOME/.config/yazi/package.toml" "$REPO_DIR/.config/yazi/package.toml" 2>/dev/null || true
-    log "Synced .config/yazi TOML files"
+    if [ -d "$HOME/.config/yazi/plugins" ]; then
+        mkdir -p "$REPO_DIR/.config/yazi/plugins"
+        rsync -av --exclude '.DS_Store' --delete "$HOME/.config/yazi/plugins/" "$REPO_DIR/.config/yazi/plugins/"
+    fi
+    log "Synced .config/yazi TOML files and plugins"
 fi
 
 # 12. Local User Scripts (including agyc)
