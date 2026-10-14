@@ -118,6 +118,14 @@ if [ -d "$HOME/scripts" ]; then
     log "Synced scripts"
 fi
 
+# 13. Karabiner Configuration
+if [ -f "$HOME/.config/karabiner/karabiner.json" ]; then
+    mkdir -p "$REPO_DIR/.config/karabiner"
+    cp "$HOME/.config/karabiner/karabiner.json" "$REPO_DIR/.config/karabiner/karabiner.json"
+    log "Synced karabiner.json"
+fi
+
+
 # Git Commit and Push if changes exist
 if [ -n "$(git status --porcelain)" ]; then
     log "Changes detected in dotfiles. Committing and pushing..."
