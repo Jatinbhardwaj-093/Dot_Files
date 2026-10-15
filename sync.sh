@@ -125,6 +125,14 @@ if [ -f "$HOME/.config/karabiner/karabiner.json" ]; then
     log "Synced karabiner.json"
 fi
 
+# 14. Hammerspoon Configuration
+if [ -f "$HOME/.hammerspoon/init.lua" ]; then
+    mkdir -p "$REPO_DIR/.hammerspoon"
+    cp "$HOME/.hammerspoon/init.lua" "$REPO_DIR/.hammerspoon/init.lua"
+    log "Synced .hammerspoon/init.lua"
+fi
+
+
 
 # Git Commit and Push if changes exist
 if [ -n "$(git status --porcelain)" ]; then
