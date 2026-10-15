@@ -154,3 +154,4 @@ local mouseDragWatcher = hs.eventtap.new({
     
     return false
 end):start()
+
