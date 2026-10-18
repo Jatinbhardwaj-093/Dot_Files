@@ -7,7 +7,7 @@ set -e
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Repository directory
-REPO_DIR="/Users/jatinbhardwaj/Github/dot_files"
+REPO_DIR="$HOME/Github/dot_files"
 LOG_FILE="$HOME/.local/state/dotfiles_sync.log"
 mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -114,7 +114,7 @@ fi
 # 12. Local User Scripts (including agyc)
 if [ -d "$HOME/scripts" ]; then
     mkdir -p "$REPO_DIR/scripts"
-    rsync -av --exclude '.DS_Store' --exclude '__pycache__' "$HOME/scripts/" "$REPO_DIR/scripts/"
+    rsync -av --exclude '.DS_Store' --exclude '__pycache__' --exclude '*.env*' --exclude '*secret*' --exclude '*.pem' --exclude '*.key' --exclude '*.token' "$HOME/scripts/" "$REPO_DIR/scripts/"
     log "Synced scripts"
 fi
 

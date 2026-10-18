@@ -175,7 +175,7 @@ bindkey '\e[106;5u'    accept-line   # Ctrl+J (CSI u)
 
 
 # bun completions
-[ -s "/Users/personal/.bun/_bun" ] && source "/Users/personal/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -198,15 +198,16 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-set OLLAMA_ORIGINS="*"
+# Ollama: Restrict origins to localhost instead of open wildcard
+export OLLAMA_ORIGINS="http://localhost:*,http://127.0.0.1:*"
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/jatinbhardwaj/.docker/completions $fpath)
+fpath=($HOME/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
 # Added by Antigravity
-export PATH="/Users/jatinbhardwaj/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 export PATH="$HOME/Library/Python/3.*/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -214,13 +215,13 @@ export PATH="/opt/homebrew/opt/qemu/bin:$PATH"
 
 
 # Added by Antigravity CLI installer
-export PATH="/Users/jatinbhardwaj/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Added by Antigravity IDE
-export PATH="/Users/jatinbhardwaj/.antigravity-ide/antigravity-ide/bin:$PATH"
+export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
 
 # Enable custom Gruvbox Dark style for all Charm/Glamour CLI utilities (including agy)
-export GLAMOUR_STYLE="/Users/jatinbhardwaj/.config/glow/gruvbox-dark.json"
+export GLAMOUR_STYLE="$HOME/.config/glow/gruvbox-dark.json"
 
 # Load local private secrets securely (keeps API keys out of public Git repos)
 [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"

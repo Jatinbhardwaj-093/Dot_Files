@@ -1,3 +1,14 @@
 sync.log
 .config/aerospace/layout_state_*
 .DS_Store
+
+# Secrets, Environment & Credentials
+*.env
+*.env.*
+*.env.local
+*.pem
+*.key
+*secrets*
+*.token
+*.credential*
+*.log

@@ -16,10 +16,10 @@ fi
 if [ "$SENDER" = "aerospace_workspace_change" ] || [ "$SENDER" = "front_app_switched" ]; then
   FOCUSED_WS=$(aerospace list-workspaces --focused 2>/dev/null)
   if [ "$FOCUSED_WS" = "Terminal" ]; then
-    python3 /Users/jatinbhardwaj/scripts/agy_sessions.py clear
+    python3 "$HOME/scripts/agy_sessions.py" clear
     exit 0
   fi
 fi
 
 # Default render via multi-session manager
-python3 /Users/jatinbhardwaj/scripts/agy_sessions.py render
+python3 "$HOME/scripts/agy_sessions.py" render
