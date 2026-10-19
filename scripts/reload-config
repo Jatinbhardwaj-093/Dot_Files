@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.config/aerospace/reload.sh" "$@"
+exec /Users/jatinbhardwaj/.config/aerospace/reload.sh "$@"

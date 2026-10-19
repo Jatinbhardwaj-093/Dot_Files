@@ -37,7 +37,7 @@ Free-2     = 'built-in'
 
 on-mode-changed = []
 
-exec-on-workspace-change = ['/bin/bash', '-c', '$HOME/.config/aerospace/on-workspace-change.sh']
+exec-on-workspace-change = ['/bin/bash', '-c', '/Users/jatinbhardwaj/.config/aerospace/on-workspace-change.sh']
 
 [key-mapping]
 preset = 'qwerty'
@@ -67,7 +67,7 @@ alt-ctrl-cmd-shift-slash = ['layout tiles horizontal vertical', 'exec-and-forget
 alt-ctrl-cmd-v = ['layout tiles horizontal vertical', 'exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change']
 alt-ctrl-cmd-shift-v = ['layout tiles horizontal vertical', 'exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change']
 alt-ctrl-cmd-comma = ['layout accordion horizontal vertical', 'exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change']
-cmd-e = 'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/toggle-space-layout.sh"'
+cmd-e = 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/toggle-space-layout.sh'
 
 # Focus
 alt-ctrl-cmd-h = 'focus left'
@@ -142,7 +142,7 @@ alt-ctrl-cmd-s = 'exec-and-forget open x-apple.systempreferences:com.apple.Sound
 alt-ctrl-cmd-g = 'exec-and-forget open -a Gemini'
 
 # Reload AeroSpace + SketchyBar Config
-alt-ctrl-cmd-period = 'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/reload.sh"'
+alt-ctrl-cmd-period = 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/reload.sh'
 
 
 # Service Mode
@@ -154,7 +154,7 @@ alt-ctrl-cmd-semicolon = 'mode service'
 
 [mode.service.binding]
 
-esc = ['exec-and-forget /bin/bash -c "$HOME/.config/aerospace/reload.sh"', 'reload-config', 'mode main']
+esc = ['exec-and-forget /Users/jatinbhardwaj/.config/aerospace/reload.sh', 'reload-config', 'mode main']
 
 r = ['flatten-workspace-tree', 'mode main']
 
