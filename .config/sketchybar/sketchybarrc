@@ -57,14 +57,22 @@ sketchybar --default "${default[@]}"
 source "$HOME/.config/sketchybar/items/spaces.sh"
 
 ##### Center Items: All Open Apps in Focused Workspace #####
-sketchybar --add item space_windows center \
+for i in {1..10}; do
+  sketchybar --add item space_windows.$i center \
+             --set space_windows.$i \
+                   drawing=off \
+                   icon.drawing=on \
+                   icon.font="sketchybar-app-font:Regular:15.0" \
+                   icon.padding_left=4 \
+                   icon.padding_right=4 \
+                   label.drawing=off \
+                   background.drawing=off \
+                   padding_left=1 \
+                   padding_right=1
+done
+
+sketchybar --add bracket space_windows '/space_windows\..*/' \
            --set space_windows \
-                 icon.drawing=on \
-                 icon.font="sketchybar-app-font:Regular:15.0" \
-                 icon.color=$AQUA \
-                 icon.padding_left=10 \
-                 icon.padding_right=10 \
-                 label.drawing=off \
                  background.color=0xff282b2c \
                  background.border_width=1 \
                  background.border_color=0x2282b3a8 \
