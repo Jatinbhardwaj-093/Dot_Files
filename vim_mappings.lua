@@ -65,3 +65,8 @@ map("n", "<leader>cc", function()
   vim.fn.setreg("+", fullpath)
   vim.notify("Copied full path: " .. fullpath)
 end, { desc = "Copy full path" })
+
+-- Zen mode (Snacks)
+map("n", "<leader>z", function()
+  Snacks.zen()
+end, { desc = "Toggle Zen Mode" })
