@@ -35,7 +35,7 @@ Chat-2     = 'built-in'
 Research-2 = 'built-in'
 Free-2     = 'built-in'
 
-on-mode-changed = []
+on-mode-changed = ['exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_mode_change']
 
 exec-on-workspace-change = ['/bin/bash', '-c', '/Users/jatinbhardwaj/.config/aerospace/on-workspace-change.sh']
 
@@ -164,25 +164,25 @@ alt-ctrl-cmd-w = 'mode resize'
 # =========================================================
 
 [mode.resize.binding]
-# Smart resize (minus shrinks, equal/plus grows)
-minus = 'resize smart -20'
-equal = 'resize smart +20'
-shift-equal = 'resize smart +20'
-keypadMinus = 'resize smart -20'
-keypadEqual = 'resize smart +20'
-keypadPlus = 'resize smart +20'
+# Smart resize (minus shrinks, equal/plus grows) - step 50 for fast adjustments
+minus = 'resize smart -50'
+equal = 'resize smart +50'
+shift-equal = 'resize smart +50'
+keypadMinus = 'resize smart -50'
+keypadEqual = 'resize smart +50'
+keypadPlus = 'resize smart +50'
 
 # Directional resize (vim keys)
-h = 'resize width -20'
-j = 'resize height +20'
-k = 'resize height -20'
-l = 'resize width +20'
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
 
 # Directional resize (arrow keys)
-left = 'resize width -20'
-down = 'resize height +20'
-up = 'resize height -20'
-right = 'resize width +20'
+left = 'resize width -50'
+down = 'resize height +50'
+up = 'resize height -50'
+right = 'resize width +50'
 
 # Exit resize mode
 enter = 'mode main'
