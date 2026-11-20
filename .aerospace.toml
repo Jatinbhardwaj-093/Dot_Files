@@ -156,6 +156,39 @@ alt-ctrl-cmd-period = 'exec-and-forget /Users/jatinbhardwaj/.config/aerospace/re
 # Service Mode
 alt-ctrl-cmd-semicolon = 'mode service'
 
+# Resize Mode
+alt-ctrl-cmd-w = 'mode resize'
+
+# =========================================================
+# RESIZE MODE
+# =========================================================
+
+[mode.resize.binding]
+# Smart resize (minus shrinks, equal/plus grows)
+minus = 'resize smart -20'
+equal = 'resize smart +20'
+shift-equal = 'resize smart +20'
+keypadMinus = 'resize smart -20'
+keypadEqual = 'resize smart +20'
+keypadPlus = 'resize smart +20'
+
+# Directional resize (vim keys)
+h = 'resize width -20'
+j = 'resize height +20'
+k = 'resize height -20'
+l = 'resize width +20'
+
+# Directional resize (arrow keys)
+left = 'resize width -20'
+down = 'resize height +20'
+up = 'resize height -20'
+right = 'resize width +20'
+
+# Exit resize mode
+enter = 'mode main'
+esc = 'mode main'
+alt-ctrl-cmd-w = 'mode main'
+
 # =========================================================
 # SERVICE MODE
 # =========================================================
